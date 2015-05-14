@@ -104,7 +104,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   jquery-rails
-  mysql2
+  mysql2 (= 0.3.18)
   rails (= 3.2.18)
   sass-rails (~> 3.2.3)
   uglifier (>= 1.0.3)

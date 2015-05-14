@@ -24,20 +24,20 @@ ActiveRecord::Schema.define(:version => 20150514092924) do
     t.string   "heading"
     t.text     "body"
     t.integer  "created_by_id"
-    t.integer  "type"
+    t.integer  "accessiblity"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
 
-  create_table "subsribptions", :force => true do |t|
-    t.integer  "suscriber_id"
-    t.integer  "suscribed_from_id"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+  create_table "subscriptions", :force => true do |t|
+    t.integer  "subscriber_id"
+    t.integer  "subscribed_from_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
-  add_index "subsribptions", ["suscribed_from_id"], :name => "index_subsribptions_on_suscribed_from_id"
-  add_index "subsribptions", ["suscriber_id"], :name => "index_subsribptions_on_suscriber_id"
+  add_index "subscriptions", ["subscribed_from_id"], :name => "index_subscriptions_on_subscribed_from_id"
+  add_index "subscriptions", ["subscriber_id"], :name => "index_subscriptions_on_subscriber_id"
 
   create_table "users", :force => true do |t|
     t.string   "full_name"

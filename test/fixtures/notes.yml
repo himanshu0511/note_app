@@ -3,11 +3,11 @@
 one:
   heading: MyString
   body: MyText
-  created_by: 
-  type: 1
+  created_by_id:
+  accessiblity: 1
 
 two:
   heading: MyString
   body: MyText
-  created_by: 
-  type: 1
+  created_by_id:
+  accessiblity: 1

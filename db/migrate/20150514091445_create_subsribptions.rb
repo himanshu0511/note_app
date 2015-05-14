@@ -1,12 +1,12 @@
 class CreateSubsribptions < ActiveRecord::Migration
   def change
-    create_table :subsribptions do |t|
-      t.references :suscriber
-      t.references :suscribed_from
+    create_table :subscriptions do |t|
+      t.references :subscriber
+      t.references :subscribed_from
 
       t.timestamps
     end
-    add_index :subsribptions, :suscriber_id
-    add_index :subsribptions, :suscribed_from_id
+    add_index :subscriptions, :subscriber_id
+    add_index :subscriptions, :subscribed_from_id
   end
 end

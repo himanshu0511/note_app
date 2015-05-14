@@ -4,7 +4,7 @@ class CreateNotes < ActiveRecord::Migration
       t.string :heading
       t.text :body
       t.references :created_by
-      t.integer :type
+      t.integer :accessiblity
 
       t.timestamps
     end
