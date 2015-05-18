@@ -1,4 +1,9 @@
 NoteApp::Application.routes.draw do
+  #match 'users/sign_up' => 'registrations#new'
+  #match 'users' => 'registrations#create', :via => post
+  #resources :registrations
+  devise_for :users, :controllers => {:registrations => "registrations"}
+
   resources :notes
 
 
