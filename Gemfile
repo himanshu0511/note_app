@@ -25,6 +25,7 @@ gem 'pry'
 gem 'pry-remote'
 gem 'pry-stack_explorer'
 gem 'pry-byebug'
+gem 'mailcatcher'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
