@@ -25,6 +25,7 @@ class NotesController < ApplicationController
   # GET /notes/new.json
   def new
     @note = Note.new
+    binding.pry
 
     respond_to do |format|
       format.html # new.html.erb
