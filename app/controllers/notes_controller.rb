@@ -2,7 +2,14 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.all
+    if not params.has_key?(:filter)
+      @notes = Note.all
+    else
+      @filter = params[:filter]
+      @notes = Note.filter(current_user, @filter)
+      @notes_filter_options = Note.FILTER_OPTIONS
+      @selected_filter_option = Note.ALL
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -64,7 +71,7 @@ class NotesController < ApplicationController
         format.html { redirect_to @note, notice: 'Note was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @note.errors, status: :unprocessable_entity }
       end
     end

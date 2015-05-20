@@ -1,5 +1,5 @@
 <h1>Listing notes</h1>
-
+<%= select_tag(:filter_selected, options_for_select(@notes_filter_options, @selected_filter_option)) %>
 <table>
   <tr>
     <th>Heading</th>
@@ -10,7 +10,6 @@
     <th></th>
     <th></th>
   </tr>
-
 <% @notes.each do |note| %>
   <tr>
     <td><%= note.heading %></td>
