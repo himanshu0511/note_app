@@ -1,4 +1,22 @@
 NoteApp::Application.routes.draw do
+  #match 'users/sign_up' => 'registrations#new'
+  #match 'users' => 'registrations#create', :via => post
+  #resources :registrations
+  devise_for :users, :controllers => {
+                       :confirmations => "confirmations",
+                       :registrations => "registrations"
+                   }
+  devise_scope :user do
+    post 'users/set_up_details/:confirmation_token' => 'registrations#initialize_user_details', :as => 'set_up_details_registrations'
+
+    authenticated  do
+      root to: 'notes#index'
+    end
+
+    unauthenticated do
+      root to: 'devise/sessions#new'
+    end
+  end
   resources :notes
 
 
