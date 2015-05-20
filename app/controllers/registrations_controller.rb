@@ -10,7 +10,7 @@ class RegistrationsController < Devise::RegistrationsController
     yield resource if block_given?
     if not resource.blank?
       prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
-      resource_updated = resource.update_without_password(account_update_params)
+      resource_updated = resource.update_with_password_first_time(account_update_params)
       yield resource if block_given?
       if resource_updated
         self.resource = resource_class.confirm_by_token(confirmation_token)
