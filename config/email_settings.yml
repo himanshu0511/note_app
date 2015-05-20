@@ -1,0 +1,17 @@
+development:
+  :address: smtp.gmail.com
+  :port: 587,
+  :domain: gmail.com
+  :user_name: himanshu.test.mail@gmail.com
+  :password: himanshupassword
+  :authentication: plain
+  :enable_starttls: true
+
+production:
+  :address: smtp.gmail.com
+  :port: 587,
+  :domain: gmail.com
+  :user_name: himanshu.test.mail@gmail.com
+  :password: himanshupassword
+  :authentication: plain
+  :enable_starttls: true
