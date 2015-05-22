@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20150515082841) do
     t.string   "heading"
     t.text     "body"
     t.integer  "created_by_id"
-    t.integer  "accessiblity"
+    t.integer  "accessibility"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
