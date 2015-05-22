@@ -3,7 +3,6 @@ class RegistrationsController < Devise::RegistrationsController
   prepend_before_filter :authenticate_scope!, only: [:edit, :update, :destroy ]
 
   def initialize_user_details
-    binding.pry
     confirmation_token = params.delete(:confirmation_token)
     confirmation_token_digest = Devise.token_generator.digest(self, :confirmation_token, confirmation_token)
     self.resource = resource_class.find_by_confirmation_token(confirmation_token_digest)
