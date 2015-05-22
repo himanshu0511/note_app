@@ -10,7 +10,7 @@ class NotesController < ApplicationController
       @notes_filter_options = Note.FILTER_OPTIONS
       @selected_filter_option = Note.ALL
     end
-
+    @note = Note.new
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @notes }
@@ -32,8 +32,6 @@ class NotesController < ApplicationController
   # GET /notes/new.json
   def new
     @note = Note.new
-    binding.pry
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @note }
@@ -49,6 +47,8 @@ class NotesController < ApplicationController
   # POST /notes.json
   def create
     @note = Note.new(params[:note])
+    @note.created_by_id = current_user.id
+    # TODO: Add logic to set sharing options of this note
 
     respond_to do |format|
       if @note.save

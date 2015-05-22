@@ -10,6 +10,10 @@
       </ul>
     </div>
   <% end %>
+    <button id="sharing_options_button"></button>
+    <div class="sharing_options">
+      <% # TODO: insert html for sharing options %>
+    </div>
 
   <div class="field">
     <%= f.label :heading %><br />
@@ -18,14 +22,6 @@
   <div class="field">
     <%= f.label :body %><br />
     <%= f.text_area :body %>
-  </div>
-  <div class="field">
-    <%= f.label :created_by %><br />
-    <%= f.text_field :created_by %>
-  </div>
-  <div class="field">
-    <%= f.label :type %><br />
-    <%= f.number_field :type %>
   </div>
   <div class="actions">
     <%= f.submit %>
