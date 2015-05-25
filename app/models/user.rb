@@ -13,9 +13,9 @@ class User < ActiveRecord::Base
   mattr_accessor :password_length
   @@password_length = 6..128
 
-  has_many :suscribers, :class_name => 'Subscription',
+  has_many :subscribers, :class_name => 'Subscription',
       :foreign_key => 'suscriber_id'
-  has_many :suscribed_from, :class_name => 'Subscription',
+  has_many :subscribed_from, :class_name => 'Subscription',
       :foreign_key => 'subscribed_from_id'
   has_many :shared_notes, :through => 'NoteSharing'
            #:foreign_key => 'note_id'

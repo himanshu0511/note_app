@@ -2,14 +2,8 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    if not params.has_key?(:filter)
-      @notes = Note.all
-    else
-      @filter = params[:filter]
-      @notes = Note.filter(current_user, @filter)
-      @notes_filter_options = Note.FILTER_OPTIONS
-      @selected_filter_option = Note.ALL
-    end
+    binding.pry
+    set_context_for_displaying_all_notes(params)
     @note = Note.new
     respond_to do |format|
       format.html # index.html.erb
@@ -20,6 +14,7 @@ class NotesController < ApplicationController
   # GET /notes/1
   # GET /notes/1.json
   def show
+    set_context_for_displaying_all_notes(params)
     @note = Note.find(params[:id])
 
     respond_to do |format|
@@ -31,6 +26,7 @@ class NotesController < ApplicationController
   # GET /notes/new
   # GET /notes/new.json
   def new
+
     @note = Note.new
     respond_to do |format|
       format.html # new.html.erb
@@ -40,6 +36,7 @@ class NotesController < ApplicationController
 
   # GET /notes/1/edit
   def edit
+    set_context_for_displaying_all_notes(params)
     @note = Note.find(params[:id])
   end
 
@@ -87,5 +84,15 @@ class NotesController < ApplicationController
       format.html { redirect_to notes_url }
       format.json { head :no_content }
     end
+  end
+
+  def set_context_for_displaying_all_notes(params)
+    if not params.has_key?(:filter)
+      @selected_filter_option = Note.ALL
+    else
+      @selected_filter_option = params[:filter]
+    end
+    @notes_filter_options = Note.FILTER_OPTIONS
+    @notes = Note.filter(current_user, @selected_filter_option)
   end
 end
