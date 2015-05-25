@@ -2,7 +2,6 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    binding.pry
     set_context_for_displaying_all_notes(params)
     @note = Note.new
     respond_to do |format|
@@ -88,11 +87,12 @@ class NotesController < ApplicationController
 
   def set_context_for_displaying_all_notes(params)
     if not params.has_key?(:filter)
-      @selected_filter_option = Note.ALL
+      @selected_filter_option = Note::ALL
     else
       @selected_filter_option = params[:filter]
     end
-    @notes_filter_options = Note.FILTER_OPTIONS
-    @notes = Note.filter(current_user, @selected_filter_option)
+    @notes_filter_options = Note::FILTER_OPTIONS
+    #@notes = Note.filter(current_user, @selected_filter_option)
+    @notes = Note.all
   end
 end

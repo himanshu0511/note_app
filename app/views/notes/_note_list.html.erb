@@ -15,11 +15,9 @@
           <tr>
             <td><%= note.heading %></td>
             <td><%= note.body %></td>
-            <td><%= note.created_by %></td>
-            <td><%= note.type %></td>
             <td><%= link_to 'Show', note %></td>
             <td><%= link_to 'Edit', edit_note_path(note) %></td>
-            <td><%= link_to 'Destroy', note, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            <td><%= link_to 'Delete', note, method: :delete, data: {confirm: 'Are you sure?'} %></td>
           </tr>
       <% end %>
     </table>
