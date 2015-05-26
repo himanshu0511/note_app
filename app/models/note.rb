@@ -11,19 +11,23 @@ class Note < ActiveRecord::Base
     self.accessibility = PRIVATE_NOTES if (self.has_attribute? :accessibility) && self.accessibility.nil?
   end
 
-  scope :user_public_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PUBLIC_NOTES) }
-  scope :user_private_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PRIVATE_NOTES) }
-  scope :user_shared_notes, lambda { |user| joins("LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`").where("user_id = ?", user.id)}
+  scope :distinct, select("DISTINCT(`notes`.`id`), `notes`.*")
+  scope :user_public_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PUBLIC_NOTES).distinct}
+  scope :user_private_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PRIVATE_NOTES).distinct}
+  scope :user_shared_notes, lambda { |user| joins("LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`").where("user_id = ?", user.id).distinct}
   scope :user_subscribed_notes, lambda { |user| joins(
                                   "LEFT JOIN `subscriptions` ON `notes`.`created_by_id` = `subscriptions`.`subscribed_from_id`"
-                              ).where("subscriber_id = ?", user.id)}
+                              ).where("subscriber_id = ? and `notes`.`accessibility` = ?", user.id, PRIVATE_NOTES).distinct}
   scope :user_all_related_notes, lambda { |user| joins(
                                    "LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`",
                                    "LEFT JOIN `subscriptions` ON `notes`.`created_by_id` = `subscriptions`.`subscribed_from_id`"
                                ).where(
-                                   '`subscriptions`.`subscriber_id` = :user_id or `note_sharings`.`user_id` = :user_id or `notes`.`created_by_id` = :user_id',
-                                   {:user_id => user.id}
-                               )}
+                                   '`subscriptions`.`subscriber_id` = :user_id and `notes`.`accessibility` = :accessibility or `note_sharings`.`user_id` = :user_id or `notes`.`created_by_id` = :user_id',
+                                   {
+                                       :user_id => user.id,
+                                       :accessibility => PRIVATE_NOTES
+                                   }
+                               ).distinct}
 
   PUBLIC_NOTES = 1
   PRIVATE_NOTES = 2

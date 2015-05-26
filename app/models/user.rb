@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
            #:foreign_key => 'note_id'
   has_many :notes, :class_name => 'Note',
       :foreign_key => 'created_by_id'
+  has_many :note_sharings, :class_name => 'NoteSharing', :foreign_key => 'user_id'
+
   validates :email, :presence => true
 
   validates_uniqueness_of :email
