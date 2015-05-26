@@ -1,0 +1,14 @@
+<div class="column col-md-3 col-sm-3">
+  <div>
+    <%= select_tag(:filter_selected, options_for_select(Note::FILTER_OPTIONS, (@selected_filter_option or Note::ALL))) %>
+  </div>
+  <div id="notes_list_sidebar_container">
+  </div>
+</div>
+
+<div class="column col-md-9 col-sm-9">
+  <%= content_for?(:content) ? yield(:content) : yield %>
+</div>
+
+<%= render :partial => 'note_constants' %>
+<%= parent_layout 'application' %>

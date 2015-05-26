@@ -1,8 +1,8 @@
 class NotesController < ApplicationController
+  layout 'notes'
   # GET /notes
   # GET /notes.json
   def index
-    set_context_for_displaying_all_notes(params)
     @note = Note.new
     respond_to do |format|
       format.html # index.html.erb
@@ -13,7 +13,6 @@ class NotesController < ApplicationController
   # GET /notes/1
   # GET /notes/1.json
   def show
-    set_context_for_displaying_all_notes(params)
     @note = Note.find(params[:id])
 
     respond_to do |format|
@@ -22,20 +21,8 @@ class NotesController < ApplicationController
     end
   end
 
-  # GET /notes/new
-  # GET /notes/new.json
-  def new
-
-    @note = Note.new
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @note }
-    end
-  end
-
   # GET /notes/1/edit
   def edit
-    set_context_for_displaying_all_notes(params)
     @note = Note.find(params[:id])
   end
 
@@ -85,14 +72,16 @@ class NotesController < ApplicationController
     end
   end
 
-  def set_context_for_displaying_all_notes(params)
+  def user_note_list
     if not params.has_key?(:filter)
       @selected_filter_option = Note::ALL
     else
-      @selected_filter_option = params[:filter]
+      @selected_filter_option = params[:filter].to_i
     end
-    @notes_filter_options = Note::FILTER_OPTIONS
-    #@notes = Note.filter(current_user, @selected_filter_option)
-    @notes = Note.all
+    @notes = Note.filter(current_user, @selected_filter_option)
+    respond_to do |format|
+      format.html { render :partial => 'note_list' }
+      format.json { render json: @notes }
+    end
   end
 end

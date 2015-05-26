@@ -17,8 +17,8 @@ NoteApp::Application.routes.draw do
       root to: 'devise/sessions#new'
     end
   end
+  match 'notes/list/' => 'notes#user_note_list'
   resources :notes
-
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
