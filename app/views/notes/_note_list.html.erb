@@ -1,9 +1,11 @@
 <% unless @notes.blank? %>
-  <ul class="notes_list js_notes_list">
+    <ul class="notes_list js_notes_list">
       <% @notes.each do |note| %>
           <li class="note_element js_note_element">
-            <div class="note_heading"><%= note.heading %></div>
-            <div class="note_body"><%= note.body %></div>
+            <a href="<%= note_path(note.id) %>">
+              <div class="note_heading"><%= note.heading %></div>
+              <div class="note_body"><%= note.body %></div>
+            </a>
           </li>
       <% end %>
     </ul>

@@ -9,7 +9,7 @@ NoteApp::Application.routes.draw do
   devise_scope :user do
     post 'users/set_up_details/:confirmation_token' => 'registrations#initialize_user_details', :as => 'set_up_details_registrations'
 
-    authenticated  do
+    authenticated do
       root to: 'notes#index'
     end
 
@@ -17,8 +17,11 @@ NoteApp::Application.routes.draw do
       root to: 'devise/sessions#new'
     end
   end
-  match 'notes/list/' => 'notes#user_note_list'
-  resources :notes
+
+  authenticate :user do
+    match 'notes/list/' => 'notes#user_note_list'
+    resources :notes
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

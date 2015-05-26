@@ -12,12 +12,12 @@ class Note < ActiveRecord::Base
   end
 
   scope :distinct, select("DISTINCT(`notes`.`id`), `notes`.*")
-  scope :user_public_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PUBLIC_NOTES).distinct}
-  scope :user_private_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PRIVATE_NOTES).distinct}
-  scope :user_shared_notes, lambda { |user| joins("LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`").where("user_id = ?", user.id).distinct}
+  scope :user_public_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PUBLIC_NOTES)}
+  scope :user_private_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PRIVATE_NOTES)}
+  scope :user_shared_notes, lambda { |user| joins("LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`").where("user_id = ?", user.id)}
   scope :user_subscribed_notes, lambda { |user| joins(
                                   "LEFT JOIN `subscriptions` ON `notes`.`created_by_id` = `subscriptions`.`subscribed_from_id`"
-                              ).where("subscriber_id = ? and `notes`.`accessibility` = ?", user.id, PRIVATE_NOTES).distinct}
+                              ).where("subscriber_id = ? and `notes`.`accessibility` = ?", user.id, PUBLIC_NOTES)}
   scope :user_all_related_notes, lambda { |user| joins(
                                    "LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`",
                                    "LEFT JOIN `subscriptions` ON `notes`.`created_by_id` = `subscriptions`.`subscribed_from_id`"
@@ -25,7 +25,7 @@ class Note < ActiveRecord::Base
                                    '`subscriptions`.`subscriber_id` = :user_id and `notes`.`accessibility` = :accessibility or `note_sharings`.`user_id` = :user_id or `notes`.`created_by_id` = :user_id',
                                    {
                                        :user_id => user.id,
-                                       :accessibility => PRIVATE_NOTES
+                                       :accessibility => PUBLIC_NOTES
                                    }
                                ).distinct}
 
@@ -58,5 +58,8 @@ class Note < ActiveRecord::Base
 
   def self.filter(user, filter)
     FILTER_TO_APPLY[filter].call(user)
+  end
+  def is_public?
+    self.accessibility == PUBLIC_NOTES ? true : false
   end
 end
