@@ -1,14 +1,4 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>Heading:</b>
-  <%= @note.heading %>
-</p>
-
-<p>
-  <b>Body:</b>
-  <%= @note.body %>
-</p>
-
-<%= link_to 'Edit', edit_note_path(@note) %> |
-<%= link_to 'Back', notes_path %>
+<%= render :partial => 'note_list' %>
+<%= render :partial => 'note' %>
+<%= link_to 'Update', edit_note_path(@note) %>
+<%= link_to 'Delete', @note, method: :delete, data: {confirm: 'Are you sure?'} %>

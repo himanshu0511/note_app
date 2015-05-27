@@ -1,0 +1,27 @@
+<h1>Listing notes</h1>
+<% unless @notes.blank? %>
+    <%= select_tag(:filter_selected, options_for_select(@notes_filter_options, @selected_filter_option)) %>
+    <table>
+      <tr>
+        <th>Heading</th>
+        <th>Body</th>
+        <th>Created by</th>
+        <th>Type</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      <% @notes.each do |note| %>
+          <tr>
+            <td><%= note.heading %></td>
+            <td><%= note.body %></td>
+            <td><%= link_to 'Show', note %></td>
+            <td><%= link_to 'Edit', edit_note_path(note) %></td>
+            <td><%= link_to 'Delete', note, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+          </tr>
+      <% end %>
+    </table>
+<% else %>
+    <h3>No Notes defined!</h3>
+<% end %>
+<br />
