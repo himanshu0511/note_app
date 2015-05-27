@@ -1,8 +1,11 @@
 class NotesController < ApplicationController
+  layout 'notes'
   # GET /notes
   # GET /notes.json
+  before_filter :to_show_note, :only => [:show]
+  before_filter :authorize, :only => [:edit, :update, :destroy]
+
   def index
-    set_context_for_displaying_all_notes(params)
     @note = Note.new
     respond_to do |format|
       format.html # index.html.erb
@@ -13,30 +16,17 @@ class NotesController < ApplicationController
   # GET /notes/1
   # GET /notes/1.json
   def show
-    set_context_for_displaying_all_notes(params)
-    @note = Note.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @note }
     end
   end
 
-  # GET /notes/new
-  # GET /notes/new.json
-  def new
-
-    @note = Note.new
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @note }
-    end
-  end
-
   # GET /notes/1/edit
   def edit
-    set_context_for_displaying_all_notes(params)
-    @note = Note.find(params[:id])
+    respond_to do |format|
+      format.html # edit.html.erb
+    end
   end
 
   # POST /notes
@@ -60,8 +50,6 @@ class NotesController < ApplicationController
   # PUT /notes/1
   # PUT /notes/1.json
   def update
-    @note = Note.find(params[:id])
-
     respond_to do |format|
       if @note.update_attributes(params[:note])
         format.html { redirect_to @note, notice: 'Note was successfully updated.' }
@@ -76,7 +64,6 @@ class NotesController < ApplicationController
   # DELETE /notes/1
   # DELETE /notes/1.json
   def destroy
-    @note = Note.find(params[:id])
     @note.destroy
 
     respond_to do |format|
@@ -85,14 +72,37 @@ class NotesController < ApplicationController
     end
   end
 
-  def set_context_for_displaying_all_notes(params)
+  def user_note_list
     if not params.has_key?(:filter)
       @selected_filter_option = Note::ALL
     else
-      @selected_filter_option = params[:filter]
+      @selected_filter_option = params[:filter].to_i
     end
-    @notes_filter_options = Note::FILTER_OPTIONS
-    #@notes = Note.filter(current_user, @selected_filter_option)
-    @notes = Note.all
+    @notes = Note.filter(current_user, @selected_filter_option)
+    respond_to do |format|
+      format.html { render :partial => 'note_list' }
+      format.json { render json: @notes }
+    end
+  end
+
+  protected
+  def to_show_note
+    @note = Note.find(params[:id])
+    unless (
+      @note.is_public? ||
+        current_user.id == @note.created_by_id ||
+        NoteSharing.where(:note_id => @note.id, :user_id => current_user.id).count() > 0
+    )
+      render :file => 'public/404.html', :status => :not_found, :layout => false
+    end
+  end
+
+  def authorize
+    if params.has_key?(:id)
+      @note = Note.find(params[:id])
+      unless current_user.id == @note.created_by_id
+        render :file => 'public/404.html', :status => :not_found, :layout => false
+      end
+    end
   end
 end

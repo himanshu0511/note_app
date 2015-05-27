@@ -1,0 +1,12 @@
+<script type="text/javascript">
+  var page = {
+      constants:{
+          urls:{
+              fetch_list_of_notes_url: "<%= url_for(:controller => 'notes', :action => 'user_note_list') %>"
+          }
+      }
+  };
+  //execute NoteModule js on page load
+  new NoteModule().init(page);
+
+</script>

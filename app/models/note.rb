@@ -2,6 +2,7 @@ class Note < ActiveRecord::Base
   attr_accessible :body, :created_by, :heading, :accessibility
   has_many :users, :through => 'NoteSharing',
            :foreign_key => 'user_id'
+  has_many :note_sharings, :class_name => 'NoteSharing', :foreign_key => 'note_id'
   belongs_to :user, :foreign_key => 'created_by_id'
   after_initialize :init
 
@@ -10,11 +11,23 @@ class Note < ActiveRecord::Base
     self.accessibility = PRIVATE_NOTES if (self.has_attribute? :accessibility) && self.accessibility.nil?
   end
 
-  scope :user_public_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PUBLIC_NOTES) }
-  scope :user_private_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PRIVATE_NOTES) }
-  scope :user_shared_notes, lambda { |user| joins(:note_sharings).where("user_id = ?", user.id)}
-  scope :user_subscribed_notes, lambda { |user| joins("INNER JOIN subscription ON note.create_by_id = subscription.suscribed_from_id").where("subscriber_id = ?", user.id)}
-  scope :user_all_related_notes, lambda { |user| joins(:note_sharings, "INNER JOIN subscription ON note.create_by_id = subscription.subscribed_from_id").where("subscriber_id = :user_id or note_sharings.user_id = :user_id or created_by = :user_id", {:user_id =>user.id})}
+  scope :distinct, select("DISTINCT(`notes`.`id`), `notes`.*")
+  scope :user_public_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PUBLIC_NOTES)}
+  scope :user_private_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PRIVATE_NOTES)}
+  scope :user_shared_notes, lambda { |user| joins("LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`").where("user_id = ?", user.id)}
+  scope :user_subscribed_notes, lambda { |user| joins(
+                                  "LEFT JOIN `subscriptions` ON `notes`.`created_by_id` = `subscriptions`.`subscribed_from_id`"
+                              ).where("subscriber_id = ? and `notes`.`accessibility` = ?", user.id, PUBLIC_NOTES)}
+  scope :user_all_related_notes, lambda { |user| joins(
+                                   "LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`",
+                                   "LEFT JOIN `subscriptions` ON `notes`.`created_by_id` = `subscriptions`.`subscribed_from_id`"
+                               ).where(
+                                   '`subscriptions`.`subscriber_id` = :user_id and `notes`.`accessibility` = :accessibility or `note_sharings`.`user_id` = :user_id or `notes`.`created_by_id` = :user_id',
+                                   {
+                                       :user_id => user.id,
+                                       :accessibility => PUBLIC_NOTES
+                                   }
+                               ).distinct}
 
   PUBLIC_NOTES = 1
   PRIVATE_NOTES = 2
@@ -36,8 +49,8 @@ class Note < ActiveRecord::Base
   ]
   FILTER_TO_APPLY = {
      ALL => method(:user_all_related_notes),
-     PUBLIC_NOTES => method(:user_private_notes),
-     PRIVATE_NOTES => method(:user_public_notes),
+     PUBLIC_NOTES => method(:user_public_notes),
+     PRIVATE_NOTES => method(:user_private_notes),
      SHARED_NOTES => method(:user_shared_notes),
      SUBSCRIBED_NOTES => method(:user_subscribed_notes)
   }
@@ -45,5 +58,8 @@ class Note < ActiveRecord::Base
 
   def self.filter(user, filter)
     FILTER_TO_APPLY[filter].call(user)
+  end
+  def is_public?
+    self.accessibility == PUBLIC_NOTES ? true : false
   end
 end

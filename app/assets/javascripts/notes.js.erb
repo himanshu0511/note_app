@@ -1,0 +1,35 @@
+// execute js for specific page only
+NoteModule = function () {
+    var thisInstance = this;
+    //page_constants
+    thisInstance.constants = {
+        selectors: {
+            notes_list_container_selector: '#notes_list_sidebar_container'
+        }
+    };
+    // function to fetch notes list
+    function fetch_notes_list($notesListContainer, filter) {// private function
+        filter = filter || {};
+        $.ajax({
+            url: thisInstance.constants.urls.fetch_list_of_notes_url,
+            method: 'get',
+            data: filter,
+            dataType: 'html',
+            contentType: 'application/json'
+        }).done(function (notesListHtml) {
+            $notesListContainer.html(notesListHtml);
+            $('#filter_selected').unbind('change').change(function () {
+                data = {filter: $(this).val()};
+                fetch_notes_list($(thisInstance.constants.selectors.notes_list_container_selector), data);
+            });
+        });
+    }
+
+    // tasks and binding on page intialization
+    thisInstance.init = function (page) {
+        thisInstance.constants = $.extend(thisInstance.constants, page.constants);
+
+        // fetch all notes belonging to user and populate notes list container
+        fetch_notes_list($(thisInstance.constants.selectors.notes_list_container_selector));
+    };
+};

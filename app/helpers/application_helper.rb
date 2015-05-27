@@ -1,2 +1,8 @@
 module ApplicationHelper
+  # reference for this snipppet is http://m.onkey.org/nested-layouts-in-rails-3
+  # see comment of Verestiuc Vlad Ovidiu
+  def parent_layout(layout)
+    @view_flow.set(:layout, self.output_buffer)
+    self.output_buffer = render(:file => "layouts/#{layout}")
+  end
 end
