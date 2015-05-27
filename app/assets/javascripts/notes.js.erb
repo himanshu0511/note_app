@@ -4,7 +4,11 @@ NoteModule = function () {
     //page_constants
     thisInstance.constants = {
         selectors: {
-            notes_list_container_selector: '#notes_list_sidebar_container'
+            note_form_selector: '.js_note_form',
+            notes_list_container_selector: '#notes_list_sidebar_container',
+            note_sharing_button_selector: '.js_sharing_options_button',
+            note_sharing_container_selector: '.js_note_sharing_container',
+            set_sharing_options_button_selector: '.js_set_sharing_options'
         }
     };
     // function to fetch notes list
@@ -28,8 +32,27 @@ NoteModule = function () {
     // tasks and binding on page intialization
     thisInstance.init = function (page) {
         thisInstance.constants = $.extend(thisInstance.constants, page.constants);
+        var selectors = thisInstance.constants.selectors;
 
         // fetch all notes belonging to user and populate notes list container
-        fetch_notes_list($(thisInstance.constants.selectors.notes_list_container_selector));
+        fetch_notes_list($(selectors.notes_list_container_selector));
+
+        var $note_sharing_form = $(selectors.note_form_selector);
+
+        //show and hide note sharing div when note sharing button is clicked
+        $note_sharing_form.find(selectors.note_sharing_button_selector).click(function(){
+            $note_sharing_form.find(selectors.note_sharing_container_selector).toggleClass('hide');
+        });
+
+        // backend validation of email list
+        $note_sharing_form.find(selectors.set_sharing_options_button_selector).click(function(){
+            $.ajax({
+                url: thisInstance.constants.urls.validate_sharing_email_list_url,
+                method: 'post',
+                data: {share_with: $note_sharing_form.find("[name='share_with']").val()},
+                dataType: 'html'
+            }).done(function(response_data){
+            });
+        });
     };
 };

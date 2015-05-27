@@ -19,7 +19,8 @@ NoteApp::Application.routes.draw do
   end
 
   authenticate :user do
-    match 'notes/list/' => 'notes#user_note_list'
+    get 'notes/list/' => 'notes#user_note_list'
+    post 'notes/validate_sharing_list/' => 'notes#validate_sharing_list'
     resources :notes
   end
 

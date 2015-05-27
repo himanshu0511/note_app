@@ -2,8 +2,9 @@ class NotesController < ApplicationController
   layout 'notes'
   # GET /notes
   # GET /notes.json
-  before_filter :to_show_note, :only => [:show]
-  before_filter :authorize, :only => [:edit, :update, :destroy]
+  before_filter :authorize_display, :only => [:show]
+  before_filter :authorize_update, :only => [:edit, :update]
+  before_filter :authorize_destroy, :only => [:destroy]
 
   def index
     @note = Note.new
@@ -85,24 +86,72 @@ class NotesController < ApplicationController
     end
   end
 
+  def generate_error_messages_for_sharing_options(response)
+    error = {
+        :count => 0,
+        :full_messages => {
+            :invalid_format => nil,
+            :not_existing_email => nil,
+            :self_included => nil
+        }
+    }
+    unless response[:invalid_format_email_list].any?
+      error[:count] += 1
+      error[:full_messages][:invalid_format] = "Invalid format for ?", response[:invalid_format_email_list].join(', ')
+    end
+    unless response[:not_existing_email_list].any?
+      error[:count] += 1
+      error[:full_messages][:not_existing_email] = "Not existing emails ?", response[:not_existing_email_list].join(', ')
+    end
+    unless response[:current_user_email_id_included]
+      error[:count] += 1
+      error[:full_messages][:self_included] = "Should not include your own email id ?", current_user.email
+    end
+    error
+  end
+
+  def validate_sharing_list
+    # response contains data with keys
+    # :invalid_format_email_list, :valid_user_list , :not_existing_email_list, current_user_email_id_included,
+    # and :current_user_email
+    @response = User.validate_email_list(current_user, params[:share_with])
+    respond_to do |format|
+      format.html {
+        @sharing_option_errors = generate_error_messages_for_sharing_options(@response)
+        render :partial => 'note_sharing_and_accessibility'
+      }
+      format.json { render json: @response }
+    end
+
+
+  end
+
   protected
-  def to_show_note
+  def authorize_display
     @note = Note.find(params[:id])
     unless (
       @note.is_public? ||
-        current_user.id == @note.created_by_id ||
-        NoteSharing.where(:note_id => @note.id, :user_id => current_user.id).count() > 0
+      current_user.id == @note.created_by_id ||
+      NoteSharing.where(:note_id => @note.id, :user_id => current_user.id).count() > 0
     )
       render :file => 'public/404.html', :status => :not_found, :layout => false
     end
   end
 
-  def authorize
-    if params.has_key?(:id)
-      @note = Note.find(params[:id])
-      unless current_user.id == @note.created_by_id
-        render :file => 'public/404.html', :status => :not_found, :layout => false
-      end
+  def authorize_update
+    @note = Note.find(params[:id])
+    unless (
+      current_user.id == @note.created_by_id ||
+      NoteSharing.where(:note_id => @note.id, :user_id => current_user.id).count() > 0
+    )
+      render :file => 'public/404.html', :status => :not_found, :layout => false
+    end
+  end
+
+  def authorize_destroy
+    @note = Note.find(params[:id])
+    unless current_user.id == @note.created_by_id
+      render :file => 'public/404.html', :status => :not_found, :layout => false
     end
   end
 end

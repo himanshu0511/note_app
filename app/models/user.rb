@@ -31,6 +31,41 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password
   validates_length_of       :password, within: password_length, allow_blank: true
 
+  scope :note_shared_with, lambda {|note_id| joins(:note_sharings).where(:note_id => note_id)}
+
+  def self.validate_email_list(current_user, email_list_string)
+    valid_email_list = []
+    invalid_format_email_list = []
+    not_existing_email_list = []
+    user_email_id_included = false
+    email_list_string.split(',').each do|email|
+      email = email.strip
+      unless @@email_regexp.match(email).nil?
+        if email == current_user.email
+          user_email_id_included = true
+        else
+          valid_email_list.append(email)
+        end
+      else
+        invalid_format_email_list.append(email)
+      end
+    end
+    valid_user_list = User.select(
+        '`email`, `full_name`').where("`email` IN (?) and `confirmed_at` IS NOT NULL", valid_email_list)
+    existing_email_set = Set.new(valid_user_list.map { |user| user.email })
+    valid_email_list.each do |email|
+      unless existing_email_set.member?(email)
+        not_existing_email_list.append(email)
+      end
+    end
+    {
+        :invalid_format_email_list => invalid_format_email_list,
+        :valid_user_list => valid_user_list,
+        :not_existing_email_list => not_existing_email_list,
+        :current_user_email_id_included => user_email_id_included
+    }
+  end
+
   def update_with_password_first_time(params, *options)
     params_valid = true
 
