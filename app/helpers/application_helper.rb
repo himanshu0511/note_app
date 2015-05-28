@@ -8,9 +8,9 @@ module ApplicationHelper
 
   def error_tag(error, html)
     unless error.nil?
-      "<div class='field_with_errors'>#{html}</div>"
+      raw("<div class='field_with_errors'>#{html}</div>")
     else
-      html
+      raw(html)
     end
   end
 end

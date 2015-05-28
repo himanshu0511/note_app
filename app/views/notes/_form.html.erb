@@ -10,11 +10,39 @@
           </ul>
         </div>
     <% end %>
-    <button class="js_sharing_options_button" type="button">Note Accessibility and Sharing Options</button>
-    <div class="hide js_note_sharing_container">
-      <%= render 'note_sharing_and_accessibility', :note => @note, :form => form %>
-    </div>
-    <hr>
+    <% if @note.new_record? or @note.created_by_id == current_user.id %>
+        <button class="js_sharing_options_button" type="button">Note Accessibility and Sharing Options</button>
+        <div class="hide js_note_sharing_container">
+          <div class="field">
+            <%= form.label :accessibility %><br/>
+            <%= form.select :accessibility, Note::ACCESSIBILITY_OPTIONS %>
+          </div>
+          <% unless @shared_users.nil? %>
+              <div class="js_note_shared_list_container">
+                <h5>Note Shared With</h5>
+                <ul>
+                  <% @shared_users.each do |user| %>
+                      <li
+                        class="js_note_sharing_list_element"
+                        data-delete_url = "<%= url_for :controller => 'notes', :action => 'destroy_shared_user', :note_id => @note.id, :user_id => user.id %>"
+                        >
+                        <span class="js_note_sharing_list_element_name"><%= user.full_name %></span>
+                        <span><%= user.email %></span>
+                        <% if current_user.id == @note.created_by_id %>
+                            <span class="js_note_sharing_delete">X</span>
+                        <% end %>
+                      </li>
+                  <% end %>
+                </ul>
+              </div>
+          <% end %>
+          <div class="field">
+            <%= form.label :share_with %><br/>
+            <%= form.text_field :share_with %>
+          </div>
+        </div>
+        <hr>
+    <% end %>
 
     <div class="field">
       <%= form.label :heading %><br/>

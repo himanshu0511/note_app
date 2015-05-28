@@ -7,7 +7,7 @@ class RegistrationsController < Devise::RegistrationsController
     confirmation_token_digest = Devise.token_generator.digest(self, :confirmation_token, confirmation_token)
     self.resource = resource_class.find_by_confirmation_token(confirmation_token_digest)
     yield resource if block_given?
-    if not resource.blank?
+    unless resource.blank?
       prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
       resource_updated = resource.update_with_password_first_time(account_update_params)
       yield resource if block_given?

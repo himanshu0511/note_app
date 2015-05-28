@@ -8,7 +8,10 @@ NoteModule = function () {
             notes_list_container_selector: '#notes_list_sidebar_container',
             note_sharing_button_selector: '.js_sharing_options_button',
             note_sharing_container_selector: '.js_note_sharing_container',
-            set_sharing_options_button_selector: '.js_set_sharing_options'
+            note_sharing_delete_selector: '.js_note_sharing_delete',
+            note_sharing_list_element_container: '.js_note_sharing_list_element',
+            note_sharing_list_element_name: '.js_note_sharing_list_element_name',
+            note_shared_list_container: '.js_note_shared_list_container'
         }
     };
     // function to fetch notes list
@@ -44,15 +47,26 @@ NoteModule = function () {
             $note_sharing_form.find(selectors.note_sharing_container_selector).toggleClass('hide');
         });
 
-        // backend validation of email list
-        $note_sharing_form.find(selectors.set_sharing_options_button_selector).click(function(){
-            $.ajax({
-                url: thisInstance.constants.urls.validate_sharing_email_list_url,
-                method: 'post',
-                data: {share_with: $note_sharing_form.find("[name='share_with']").val()},
-                dataType: 'html'
-            }).done(function(response_data){
-            });
-        });
+        //delete note sharing when cross is clicked
+        $note_sharing_form.find(selectors.note_sharing_delete_selector).click(function(){
+            var $element = $(this).closest(selectors.note_sharing_list_element_container),
+                user_full_name = $element.find(selectors.note_sharing_list_element_name).text();
+            response = confirm("Are you sure you want to remove " + user_full_name + " from shared list?");
+            if(response){
+                $.ajax({
+                    url: $element.data('delete_url'),
+                    method: 'delete',
+                    dataType: 'json'
+                }).done(function(data){
+                    $element.remove();
+                    $note_shared_list_container = $note_sharing_form.find(
+                            selectors.note_shared_list_container
+                    );
+                    if($note_shared_list_container.find('li').length === 0){
+                        $note_shared_list_container.remove();
+                    }
+                });
+            }
+        })
     };
 };

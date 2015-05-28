@@ -20,7 +20,7 @@ NoteApp::Application.routes.draw do
 
   authenticate :user do
     get 'notes/list/' => 'notes#user_note_list'
-    post 'notes/validate_sharing_list/' => 'notes#validate_sharing_list'
+    delete 'note_sharings/:note_id/user/:user_id' => 'notes#destroy_shared_user'
     resources :notes
   end
 
