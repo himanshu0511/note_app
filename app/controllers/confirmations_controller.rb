@@ -5,7 +5,7 @@ class ConfirmationsController < Devise::ConfirmationsController
     self.resource = resource_class.find_by_confirmation_token(confirmation_token)
     yield resource if block_given?
 
-    if not resource.blank?
+    unless resource.blank?
       @confirmation_token = params[:confirmation_token]
       render :template => 'devise/registrations/initialize_user_details.html.erb'
     else

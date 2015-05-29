@@ -2,8 +2,10 @@ class NotesController < ApplicationController
   layout 'notes'
   # GET /notes
   # GET /notes.json
-  before_filter :to_show_note, :only => [:show]
-  before_filter :authorize, :only => [:edit, :update, :destroy]
+  before_filter :authorize_display, :only => [:show]
+  before_filter :authorize_update, :only => [:edit, :update]
+  before_filter :authorize_destroy, :only => [:destroy]
+  before_filter :authorize_destroy_shared_user, :only => [:destroy_shared_user]
 
   def index
     @note = Note.new
@@ -24,6 +26,7 @@ class NotesController < ApplicationController
 
   # GET /notes/1/edit
   def edit
+    @shared_users = User.note_shared_with(@note)
     respond_to do |format|
       format.html # edit.html.erb
     end
@@ -32,9 +35,9 @@ class NotesController < ApplicationController
   # POST /notes
   # POST /notes.json
   def create
-    @note = Note.new(params[:note])
+    notes_params = params[:note]
+    @note = Note.new(notes_params)
     @note.created_by_id = current_user.id
-    # TODO: Add logic to set sharing options of this note
 
     respond_to do |format|
       if @note.save
@@ -61,6 +64,7 @@ class NotesController < ApplicationController
     end
   end
 
+
   # DELETE /notes/1
   # DELETE /notes/1.json
   def destroy
@@ -72,8 +76,17 @@ class NotesController < ApplicationController
     end
   end
 
+  def destroy_shared_user
+    note_sharing = NoteSharing.find_by_user_id_and_note_id(params[:user_id], params[:note_id])
+    note_sharing.destroy
+
+    respond_to do |format|
+      format.json { head :no_content }
+    end
+  end
+
   def user_note_list
-    if not params.has_key?(:filter)
+    unless params.has_key?(:filter)
       @selected_filter_option = Note::ALL
     else
       @selected_filter_option = params[:filter].to_i
@@ -86,10 +99,10 @@ class NotesController < ApplicationController
   end
 
   protected
-  def to_show_note
+  def authorize_display
     @note = Note.find(params[:id])
     unless (
-      @note.is_public? ||
+    @note.is_public? ||
         current_user.id == @note.created_by_id ||
         NoteSharing.where(:note_id => @note.id, :user_id => current_user.id).count() > 0
     )
@@ -97,12 +110,27 @@ class NotesController < ApplicationController
     end
   end
 
-  def authorize
-    if params.has_key?(:id)
-      @note = Note.find(params[:id])
-      unless current_user.id == @note.created_by_id
-        render :file => 'public/404.html', :status => :not_found, :layout => false
-      end
+  def authorize_update
+    @note = Note.find(params[:id])
+    unless (
+    current_user.id == @note.created_by_id ||
+        NoteSharing.where(:note_id => @note.id, :user_id => current_user.id).count() > 0
+    )
+      render :file => 'public/404.html', :status => :not_found, :layout => false
+    end
+  end
+
+  def authorize_destroy
+    @note = Note.find(params[:id])
+    unless current_user.id == @note.created_by_id
+      render :file => 'public/404.html', :status => :not_found, :layout => false
+    end
+  end
+
+  def authorize_destroy_shared_user
+    @note = Note.find(params[:note_id])
+    unless current_user.id == @note.created_by_id
+      render :file => 'public/404.html', :status => :not_found, :layout => false
     end
   end
 end

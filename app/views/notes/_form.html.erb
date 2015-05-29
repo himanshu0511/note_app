@@ -1,29 +1,58 @@
-<%= form_for(@note) do |f| %>
-  <% if @note.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@note.errors.count, "error") %> prohibited this note from being saved:</h2>
+<%= form_for(@note, :html => {:class => 'js_note_form'}) do |form| %>
+    <% if @note.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@note.errors.count, "error") %> prohibited this note from being saved:</h2>
 
-      <ul>
-      <% @note.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-    <button id="sharing_options_button"></button>
-    <div class="sharing_options">
-      <% # TODO: insert html for sharing options %>
-    </div>
+          <ul>
+            <% @note.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <% if @note.new_record? or @note.created_by_id == current_user.id %>
+        <button class="js_sharing_options_button" type="button">Note Accessibility and Sharing Options</button>
+        <div class="hide js_note_sharing_container">
+          <div class="field">
+            <%= form.label :accessibility %><br/>
+            <%= form.select :accessibility, Note::ACCESSIBILITY_OPTIONS %>
+          </div>
+          <% unless @shared_users.nil? %>
+              <div class="js_note_shared_list_container">
+                <h5>Note Shared With</h5>
+                <ul>
+                  <% @shared_users.each do |user| %>
+                      <li
+                        class="js_note_sharing_list_element"
+                        data-delete_url = "<%= url_for :controller => 'notes', :action => 'destroy_shared_user', :note_id => @note.id, :user_id => user.id %>"
+                        >
+                        <span class="js_note_sharing_list_element_name"><%= user.full_name %></span>
+                        <span><%= user.email %></span>
+                        <% if current_user.id == @note.created_by_id %>
+                            <span class="js_note_sharing_delete">X</span>
+                        <% end %>
+                      </li>
+                  <% end %>
+                </ul>
+              </div>
+          <% end %>
+          <div class="field">
+            <%= form.label :share_with %><br/>
+            <%= form.text_field :share_with %>
+          </div>
+        </div>
+        <hr>
+    <% end %>
 
-  <div class="field">
-    <%= f.label :heading %><br />
-    <%= f.text_field :heading %>
-  </div>
-  <div class="field">
-    <%= f.label :body %><br />
-    <%= f.text_area :body %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="field">
+      <%= form.label :heading %><br/>
+      <%= form.text_field :heading %>
+    </div>
+    <div class="field">
+      <%= form.label :body %><br/>
+      <%= form.text_area :body %>
+    </div>
+    <div class="actions">
+      <%= form.submit %>
+    </div>
 <% end %>

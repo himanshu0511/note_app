@@ -5,4 +5,12 @@ module ApplicationHelper
     @view_flow.set(:layout, self.output_buffer)
     self.output_buffer = render(:file => "layouts/#{layout}")
   end
+
+  def error_tag(error, html)
+    unless error.nil?
+      raw("<div class='field_with_errors'>#{html}</div>")
+    else
+      raw(html)
+    end
+  end
 end

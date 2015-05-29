@@ -19,7 +19,8 @@ NoteApp::Application.routes.draw do
   end
 
   authenticate :user do
-    match 'notes/list/' => 'notes#user_note_list'
+    get 'notes/list/' => 'notes#user_note_list'
+    delete 'note_sharings/:note_id/user/:user_id' => 'notes#destroy_shared_user'
     resources :notes
   end
 
