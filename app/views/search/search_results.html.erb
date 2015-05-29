@@ -1,0 +1,15 @@
+<%= select_tag('results_filter', [['All',1],['Users',2],['Notes',3]]) %>
+<div>
+  <% @users.each do |user| %>
+      <div>
+        <span>user.full_name</span>
+        <span>user.email</span>
+      </div>
+  <% end %>
+  <% @notes.each do |note| %>
+      <div>
+        <span>note.heading</span>
+        <span>note.body</span>
+      </div>
+  <% end %>
+</div>
