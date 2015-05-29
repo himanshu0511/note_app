@@ -1,5 +1,5 @@
 class ConfirmationsController < Devise::ConfirmationsController
- # GET /resource/confirmation?confirmation_token=abcdef
+  # GET /resource/confirmation?confirmation_token=abcdef
   def show
     confirmation_token = Devise.token_generator.digest(self, :confirmation_token, params[:confirmation_token])
     self.resource = resource_class.find_by_confirmation_token(confirmation_token)

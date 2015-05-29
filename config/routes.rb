@@ -7,7 +7,9 @@ NoteApp::Application.routes.draw do
                        :registrations => "registrations"
                    }
   devise_scope :user do
-    post 'users/set_up_details/:confirmation_token' => 'registrations#initialize_user_details', :as => 'set_up_details_registrations'
+    post 'users/set_up_details/:confirmation_token' => 'registrations#initialize_user_details'
+    get 'users/set_forgotten_password/:confirmation_token' => 'passwords#new'
+    post 'users/set_forgotten_password' => 'passwords#set_forgotten_password'
 
     authenticated do
       root to: 'notes#index'
@@ -22,6 +24,9 @@ NoteApp::Application.routes.draw do
     get 'notes/list/' => 'notes#user_note_list'
     delete 'note_sharings/:note_id/user/:user_id' => 'notes#destroy_shared_user'
     resources :notes
+
+    get 'user_profile/' => 'user_profile#index'
+    get 'user_profile/:id' => 'user_profile#show'
   end
 
   # The priority is based upon order of creation:
