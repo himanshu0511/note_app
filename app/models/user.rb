@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   @@password_length = 6..128
 
   has_many :subscribers, :class_name => 'Subscription',
-           :foreign_key => 'suscriber_id'
+           :foreign_key => 'subscriber_id'
   has_many :subscribed_from, :class_name => 'Subscription',
            :foreign_key => 'subscribed_from_id'
   has_many :shared_notes, :through => 'NoteSharing'
@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
 
   validates_confirmation_of :password
   validates_length_of :password, within: password_length, allow_blank: true
-
   scope :note_shared_with, lambda { |note_id| joins(:note_sharings).where("`note_sharings`.`note_id` = ?", note_id) }
 
   def self.validate_email_list(current_user_id, email_list_string, note_id=nil)
@@ -46,7 +45,7 @@ class User < ActiveRecord::Base
       end
     end
     unless note_id.nil?
-      already_shared_users_ids = Set.new(User.joins(:note_sharings).where("`note_sharings`.`note_id`=?", note_id).pluck(:id))
+      already_shared_users_ids = Set.new(User.note_shared_with(note_id).pluck(:id))
     end
     valid_user_list = User.select(
         '`id`, `email`, `full_name`'
@@ -86,7 +85,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def update_with_password_first_time(params, *options)
+  def update_with_password_without_current_password(params, *options)
     params_valid = true
 
     if params[:password].blank?

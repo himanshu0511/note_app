@@ -1,0 +1,43 @@
+<div>
+  <div>
+    <span>Full Name</span>
+    <%= @user.full_name %>
+  </div>
+  <div>
+    <span>Email</span>
+    <%= @user.email %>
+  </div>
+  <% if @user.id == current_user.id %>
+      <hr>
+      <button type="button">Change Password</button>
+      <div class="hide js_password_change_div_container">
+      </div>
+  <% end %>
+  <hr>
+  <button type="button">Other Information</button>
+  <div class="hide">
+    <div>
+      <span>Number of Subscribees</span>
+      <span><%= @user.subscribers.count %></span>
+    </div>
+    <div>
+      <span>Number of Subscriptions</span>
+      <span><%= @user.subscribed_from.count %></span>
+    </div>
+    <div>
+      <span>Number of Public Notes</span>
+      <span><%= Note.user_public_notes(@user).count %></span>
+    </div>
+    <div>
+      <span>Number of Private Notes</span>
+      <span><%= Note.user_private_notes(@user).count %></span>
+    </div>
+    <% if current_user.id != @user.id %>
+        <div>
+          <span>Number of Notes shared with me</span>
+          <span>
+            <%= NoteSharing.notes_shared(@user, current_user).count %></span>
+        </div>
+    <% end %>
+  </div>
+</div>
