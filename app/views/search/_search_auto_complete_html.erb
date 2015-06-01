@@ -1,14 +1,13 @@
 <div>
-  <% @users.each do |user| %>
-      <div>
-        <span>user.full_name</span>
-        <span>user.email</span>
-      </div>
-  <% end %>
-  <% @notes.each do |note| %>
-      <div>
-        <span>note.heading</span>
-        <span>note.body</span>
-      </div>
-  <% end %>
+  <div>
+    <% @users.each do |user| %>
+        <%= render :partial => user.get_search_result_partial_path, :locals => {:object => user} %>
+    <% end %>
+  </div>
+  <div>
+    <% @notes.each do |note| %>
+        <%= render :partial => note.get_search_result_partial_path, :locals => {:object => note} %>
+    <% end %>
+  </div>
+  <a href="<%= url_for(:controller => 'search', :action => 'detailed_search_results', :search_string => params[:search_string]) %>">View All Results</a>
 </div>

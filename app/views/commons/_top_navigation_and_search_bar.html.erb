@@ -1,5 +1,8 @@
-<div class="pull-right">
+<div class="row">
   <% unless current_user.nil? %>
-      <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
+      <span class="pull-left">Search</span>
+      <%= text_field_tag 'search_bar', nil, :class => 'js_search_bar pull-left' , :data => { :url => url_for( :controller => 'search', :action => 'search_autocomplete')} %>
+      <%= link_to "Log Out", destroy_user_session_path, :method => :delete, :class => 'pull-right' %>
   <% end %>
 </div>
+<div class="js_search_results_container row"></div>

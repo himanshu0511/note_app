@@ -1,0 +1,10 @@
+<% if @results.any? %>
+    <% @results.each do |result| %>
+        <%= render :partial => result.get_search_result_partial_path, :locals => {:object => result} %>
+    <% end %>
+    <div>
+      <%= will_paginate @results %>
+    </div>
+<% else %>
+    <h5>No results to display!</h5>
+<% end %>

@@ -1,0 +1,53 @@
+// execute js for specific page only
+SearchModule = function () {
+    var thisInstance = this;
+    //page_constants
+    thisInstance.constants = {
+        selectors: {
+            search_box_selector: '.js_search_bar',
+            search_results_container: '.js_search_results_container'
+        }
+    };
+    // function to fetch search auto complete list
+    function fetch_search_results_and_populate(searchString, $searchResultsContainer, url) {// private function
+        if (searchString !== "") {
+            if (!fetch_search_results_and_populate.ajaxLock) {
+                fetch_search_results_and_populate.ajaxLock = true;
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    data: {search_string: searchString},
+                    dataType: 'html'
+                }).done(function (searchResultsHtml) {
+                    $searchResultsContainer.html(searchResultsHtml);
+                }).always(function () {
+                    fetch_search_results_and_populate.ajaxLock = false
+                });
+            }
+        }
+        else {
+            $searchResultsContainer.empty();
+        }
+    }
+
+    // tasks and bindings on page initialization
+    thisInstance.init = function (page) {page = page || {};
+        page = $.extend(true, page || {}, {constants: {selectors: {}, urls: {}}});
+        thisInstance.constants = $.extend(true, thisInstance.constants, page.constants);
+        var selectors = thisInstance.constants.selectors,
+                $searchBox = $(selectors.search_box_selector);
+        thisInstance.constants.urls.search_autocomplete_url = $searchBox.data('url');
+
+        //display search results as we enter keyword in search box
+        var $searchResultsContainer = $(selectors.search_results_container);
+        $searchBox.on('change keyup', function () {
+            var searchString = $(this).val().trim();
+            fetch_search_results_and_populate(
+                    searchString,
+                    $searchResultsContainer,
+                    thisInstance.constants.urls.search_autocomplete_url
+            );
+
+        });
+    };
+};
