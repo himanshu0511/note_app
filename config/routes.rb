@@ -21,12 +21,18 @@ NoteApp::Application.routes.draw do
   end
 
   authenticate :user do
-    get 'notes/list/' => 'notes#user_note_list'
+    #notes
+    get 'notes/list' => 'notes#user_note_list'
     delete 'note_sharings/:note_id/user/:user_id' => 'notes#destroy_shared_user'
     resources :notes
 
-    get 'user_profile/' => 'user_profile#index'
+    #user_profile
     get 'user_profile/:id' => 'user_profile#show'
+    get 'user_profile' => 'user_profile#index'
+
+    #search
+    get 'search/autocomplete' => 'search#search_autocomplete'
+    get 'search/detailed_results/:search_string' => 'search#detailed_search_results'
   end
 
   # The priority is based upon order of creation:

@@ -1,4 +1,5 @@
 class Note < ActiveRecord::Base
+
   attr_accessible :body, :created_by, :heading, :accessibility, :share_with
   has_many :users, :through => 'NoteSharing',
            :foreign_key => 'user_id'
@@ -62,6 +63,13 @@ class Note < ActiveRecord::Base
      SHARED_NOTES => method(:user_shared_notes),
      SUBSCRIBED_NOTES => method(:user_subscribed_notes)
   }
+
+  SEARCH_RESULT_PARTIAL = 'search/note_partial'
+
+  def get_search_result_partial_path
+    SEARCH_RESULT_PARTIAL
+  end
+
   validates_inclusion_of :accessibility, :in => ACCESSIBILITY_OPTIONS.collect{|x| x[1]}, :allow_blank => true
 
   validate :validation_note_share_with

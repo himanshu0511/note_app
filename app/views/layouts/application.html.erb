@@ -8,12 +8,20 @@
 </head>
 <body>
 <div class="container">
-  <div class="row">
+  <div class="row search_bar_container">
     <%= render :partial => 'commons/top_navigation_and_search_bar' %>
   </div>
   <div class="row">
-    <%= yield %>
+    <%= content_for?(:content) ? yield(:content) : yield %>
   </div>
 </div>
+<%= javascript_include_tag "application" %>
+<script type="text/javascript">
+    //execute SearchModule js on page load
+    (function(){
+        new SearchModule().init();
+    })();
+</script>
+<%= content_for?(:local_scripts) ? yield(:local_scripts) : "" %>
 </body>
 </html>

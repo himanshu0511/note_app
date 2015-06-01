@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
@@ -12,6 +13,12 @@ class User < ActiveRecord::Base
   # Range validation for password length
   mattr_accessor :password_length
   @@password_length = 6..128
+
+  SEARCH_RESULT_PARTIAL = 'search/user_partial'
+
+  def get_search_result_partial_path
+    SEARCH_RESULT_PARTIAL
+  end
 
   has_many :subscribers, :class_name => 'Subscription',
            :foreign_key => 'subscriber_id'

@@ -7,12 +7,14 @@ gem 'rails', '3.2.18'
 
 gem 'mysql2', '0.3.18'
 gem 'devise', '3.4.1'
+gem 'thinking-sphinx', '~> 3.1.0'
 
 # gems for sass and bootstrap
 gem 'bootstrap-sass', '~> 3.1.1.0 '
 gem 'autoprefixer-rails'
 gem 'sass-rails',   '~> 3.2.3'
 #gem 'coffee-rails', '~> 3.2.1'
+gem 'will_paginate', '~> 3.0.6'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', :platforms => :ruby

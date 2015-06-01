@@ -11,7 +11,8 @@ NoteModule = function () {
             note_sharing_delete_selector: '.js_note_sharing_delete',
             note_sharing_list_element_container: '.js_note_sharing_list_element',
             note_sharing_list_element_name: '.js_note_sharing_list_element_name',
-            note_shared_list_container: '.js_note_shared_list_container'
+            note_shared_list_container: '.js_note_shared_list_container',
+            note_filter_selector: '#filter_selected'
         }
     };
     // function to fetch notes list
@@ -25,7 +26,7 @@ NoteModule = function () {
             contentType: 'application/json'
         }).done(function (notesListHtml) {
             $notesListContainer.html(notesListHtml);
-            $('#filter_selected').unbind('change').change(function () {
+            $(thisInstance.constants.selectors.note_filter_selector).unbind('change').change(function () {
                 data = {filter: $(this).val()};
                 fetch_notes_list($(thisInstance.constants.selectors.notes_list_container_selector), data);
             });
@@ -34,7 +35,8 @@ NoteModule = function () {
 
     // tasks and binding on page intialization
     thisInstance.init = function (page) {
-        thisInstance.constants = $.extend(thisInstance.constants, page.constants);
+        page = $.extend(true, page || {}, {constants: {selectors: {}, urls: {}}});
+        thisInstance.constants = $.extend(true, thisInstance.constants, page.constants);
         var selectors = thisInstance.constants.selectors;
 
         // fetch all notes belonging to user and populate notes list container
