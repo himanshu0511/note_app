@@ -3,8 +3,10 @@
       <% @notes.each do |note| %>
           <li class="note_element js_note_element">
             <a href="<%= note_path(note.id) %>">
-              <div class="note_heading"><%= note.heading %></div>
-              <div class="note_body"><%= note.body %></div>
+              <dl>
+                <dt class="note_heading"><%= note.heading %></dt>
+                <dd class="note_body"><%= note.body.truncate(25, :seperator => /\s/) %></dd>
+              </dl>
             </a>
           </li>
       <% end %>

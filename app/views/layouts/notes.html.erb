@@ -1,14 +1,18 @@
-<div class="column col-md-3 col-sm-3">
-  <div>
-    <%= select_tag(:filter_selected, options_for_select(Note::FILTER_OPTIONS, (@selected_filter_option or Note::ALL))) %>
-  </div>
-  <div id="notes_list_sidebar_container">
-  </div>
-</div>
+<% content_for :content do %>
+    <div class="side_bar column col-md-3 col-sm-3">
+      <div>
+        <%= select_tag(:filter_selected, options_for_select(Note::FILTER_OPTIONS, (@selected_filter_option or Note::ALL)), :class => "note_filter_selector") %>
+      </div>
+      <hr/>
+      <div id="notes_list_sidebar_container">
+      </div>
+    </div>
 
-<div class="column col-md-9 col-sm-9">
-  <%= content_for?(:content) ? yield(:content) : yield %>
-</div>
-
-<%= render :partial => 'note_constants' %>
+    <div class="note_content_container column col-md-9 col-sm-9">
+      <%= content_for?(:content) ? yield(:content) : yield %>
+    </div>
+<% end %>
+<% content_for :local_scripts do %>
+    <%= render :partial => 'note_constants' %>
+<% end %>
 <%= parent_layout 'application' %>

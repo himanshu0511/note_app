@@ -11,9 +11,9 @@
         </div>
     <% end %>
     <% if @note.new_record? or @note.created_by_id == current_user.id %>
-        <button class="js_sharing_options_button" type="button">Note Accessibility and Sharing Options</button>
+        <button class="js_sharing_options_button btn custom_button" type="button">Note Accessibility and Sharing Options</button>
         <div class="hide js_note_sharing_container">
-          <div class="field">
+          <div class="form-group">
             <%= form.label :accessibility %><br/>
             <%= form.select :accessibility, Note::ACCESSIBILITY_OPTIONS %>
           </div>
@@ -36,7 +36,7 @@
                 </ul>
               </div>
           <% end %>
-          <div class="field">
+          <div class="form-group">
             <%= form.label :share_with %><br/>
             <%= form.text_field :share_with %>
           </div>
@@ -44,15 +44,15 @@
         <hr>
     <% end %>
 
-    <div class="field">
+    <div class="form-group">
       <%= form.label :heading %><br/>
       <%= form.text_field :heading %>
     </div>
-    <div class="field">
+    <div class="form-group">
       <%= form.label :body %><br/>
       <%= form.text_area :body %>
     </div>
     <div class="actions">
-      <%= form.submit %>
+      <%= form.submit nil, :class => "btn custom_button" %>
     </div>
 <% end %>

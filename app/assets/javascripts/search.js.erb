@@ -49,5 +49,11 @@ SearchModule = function () {
             );
 
         });
+
+        $(document).click(function(e){
+            if(!$(e.target).is('.js_search_results_container, .js_search_results_container *, .js_search_bar, .js_search_bar *')){
+                $searchResultsContainer.empty();
+            }
+        })
     };
 };

@@ -2,7 +2,7 @@
     <div class="column col-md-3 col-sm-3">
       <%= select_tag(:results_filter, options_for_select(@select_filter_options, @default_selected_filter), :class => 'js_search_filter', :data => {:url => url_for(:controller => 'search', :action => 'detailed_search_results')}) %>
     </div>
-    <div class="js_results_container column col-md-9 col-sm-9">
+    <div class="js_results_container column col-md-9 col-sm-9 main_sub_content">
       <%= render :partial => 'search/search_results', :locals => {:@result => @result} %>
     </div>
 <% end %>
