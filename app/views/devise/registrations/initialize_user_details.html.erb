@@ -1,35 +1,38 @@
-<h2 class="user_form_heading"><%= resource_name.to_s.humanize %></h2>
-<div class="user_form_container">
+<div class="main_sub_content">
+  <h2 class="user_form_heading"><%= resource_name.to_s.humanize %></h2>
 
-  <%= form_for(resource, as: resource_name, url: url_for(:controller => 'registrations', :action => 'initialize_user_details', :confirmation_token => @confirmation_token), html: {method: :post}) do |f| %>
-      <%= devise_error_messages! %>
+  <div class="user_form_container">
 
-      <div class="form-group">
-        <%= f.label :email %><br/>
-        <%= f.email_field :email, autofocus: true, readonly: true %>
-      </div>
-      <%= hidden_field_tag 'confirmation_token', @confirmation_token %>
-      <div class="form-group">
-        <%= f.label :full_name %><br/>
-        <%= f.text_field :full_name, autofocus: true %>
-      </div>
+    <%= form_for(resource, as: resource_name, url: url_for(:controller => 'registrations', :action => 'initialize_user_details', :confirmation_token => @confirmation_token), html: {method: :post}) do |f| %>
+        <%= devise_error_messages! %>
 
-      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-      <% end %>
+        <div class="form-group">
+          <%= f.label :email %><br/>
+          <%= f.email_field :email, autofocus: true, readonly: true %>
+        </div>
+        <%= hidden_field_tag 'confirmation_token', @confirmation_token %>
+        <div class="form-group">
+          <%= f.label :full_name %><br/>
+          <%= f.text_field :full_name, autofocus: true %>
+        </div>
 
-      <div class="form-group">
-        <%= f.label :password %><br/>
-        <%= f.password_field :password, autocomplete: "off" %>
-      </div>
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+            <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <% end %>
 
-      <div class="form-group">
-        <%= f.label :password_confirmation %><br/>
-        <%= f.password_field :password_confirmation, autocomplete: "off" %>
-      </div>
+        <div class="form-group">
+          <%= f.label :password %><br/>
+          <%= f.password_field :password, autocomplete: "off" %>
+        </div>
 
-      <div class="actions">
-        <%= f.submit "Create", :class => "btn custom_button" %>
-      </div>
-  <% end %>
+        <div class="form-group">
+          <%= f.label :password_confirmation %><br/>
+          <%= f.password_field :password_confirmation, autocomplete: "off" %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Create", :class => "custom_button" %>
+        </div>
+    <% end %>
+  </div>
 </div>

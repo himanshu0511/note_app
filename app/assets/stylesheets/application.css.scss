@@ -13,6 +13,7 @@
  */
 @import "bootstrap";
 @import "bootstrap/theme";
+@import "compass_twitter_bootstrap";
 
 body {
   background-color: #f6f6f6;
@@ -30,6 +31,7 @@ body {
 
 .user_form_heading {
   font-family: Sans-Serif;
+  text-align: center;
 }
 
 .user_form_container {
@@ -39,6 +41,7 @@ body {
   padding: 20px;
   background-clip: border-box;
   border-radius: 3px;
+  border: transparent;
   h2 {
     color: blue;
   }
@@ -47,14 +50,17 @@ body {
 form {
   .form-group {
     label {
-      line-height: 20px;
       color: #555555;
     }
     input {
+      font-size: 14px;
       border-radius: 3px;
       border-style: groove;
       padding: 8px 6px;
-      line-height: 12px;
+      color: #444444;
+      height: 30px;
+      //line-height: 12px;
+      min-width: 266px;
     }
   }
   .custom_button {
@@ -63,7 +69,6 @@ form {
     display: inline-block;
     cursor: pointer;
     color: #ffffff;
-    font-size: 15px;
     padding: 9px 23px;
     text-decoration: none;
 

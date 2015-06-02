@@ -1,16 +1,19 @@
-<h2 class="user_form_heading">Sign up</h2>
-<div class="user_form_container">
+<div class="main_sub_content">
+  <h2 class="user_form_heading">Sign up</h2>
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <%= devise_error_messages! %>
+  <div class="user_form_container">
 
-      <div class="form-group">
-        <%= f.label :email %><br/>
-        <%= f.email_field :email, autofocus: true %>
-      </div>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <%= devise_error_messages! %>
 
-      <div class="actions">
-        <%= f.submit "Verify Email", :class => "btn custom_button" %>
-      </div>
-  <% end %>
+        <div class="form-group">
+          <%= f.label :email %><br/>
+          <%= f.email_field :email, autofocus: true %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Verify Email", :class => "custom_button" %>
+        </div>
+    <% end %>
+  </div>
 </div>
