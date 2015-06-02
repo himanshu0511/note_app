@@ -165,7 +165,7 @@ form {
     margin-bottom: 0px;
     padding: 20px;
     background-clip: border-box;
-    height: 575px;
+    min-height: 575px;
   }
   .side_bar {
     .note_filter_selector {
