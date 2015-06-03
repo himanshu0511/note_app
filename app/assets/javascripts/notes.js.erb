@@ -8,27 +8,37 @@ NoteModule = function () {
             notes_list_container_selector: '#notes_list_sidebar_container',
             note_sharing_button_selector: '.js_sharing_options_button',
             note_sharing_container_selector: '.js_note_sharing_container',
+            note_sharing_container_close_link_selector: '.js_close_note_sharing_dialog',
             note_sharing_delete_selector: '.js_note_sharing_delete',
             note_sharing_list_element_container: '.js_note_sharing_list_element',
             note_sharing_list_element_name: '.js_note_sharing_list_element_name',
             note_shared_list_container: '.js_note_shared_list_container',
-            note_filter_selector: '#filter_selected'
+            note_filter_selector: '#filter_selected',
+            pagination_links_selector: '.js_pagination a'
         }
     };
     // function to fetch notes list
-    function fetch_notes_list($notesListContainer, filter) {// private function
+    function fetch_notes_list($notesListContainer, filter, url) {// private function
         filter = filter || {};
         $.ajax({
-            url: thisInstance.constants.urls.fetch_list_of_notes_url,
+            url: url || thisInstance.constants.urls.fetch_list_of_notes_url,
             method: 'get',
             data: filter,
             dataType: 'html',
             contentType: 'application/json'
         }).done(function (notesListHtml) {
             $notesListContainer.html(notesListHtml);
+
+            // bind fetching of filter note list when note filter select field is changed
             $(thisInstance.constants.selectors.note_filter_selector).unbind('change').change(function () {
-                data = {filter: $(this).val()};
-                fetch_notes_list($(thisInstance.constants.selectors.notes_list_container_selector), data);
+                var data = {filter: $(this).val()};
+                fetch_notes_list($notesListContainer, data);
+            });
+            // pagination functionality
+            $notesListContainer.find(thisInstance.constants.selectors.pagination_links_selector).click(function () {
+                var url = $(this).attr('href');
+                fetch_notes_list($notesListContainer, {}, url);
+                return false;
             });
         });
     }
@@ -45,23 +55,28 @@ NoteModule = function () {
         var $note_sharing_form = $(selectors.note_form_selector);
 
         //show and hide note sharing div when note sharing button is clicked
-        $note_sharing_form.find(selectors.note_sharing_button_selector).click(function(){
+        $note_sharing_form.find(selectors.note_sharing_button_selector+','+selectors.note_sharing_container_close_link_selector).click(function(){
             $note_sharing_form.find(selectors.note_sharing_container_selector).toggleClass('hide');
+        });
+        $(document).click(function(e){
+            if(!$(e.target).is(selectors.note_sharing_container_selector+','+selectors.note_sharing_container_selector+' *,'+selectors.note_sharing_button_selector)){
+                $note_sharing_form.find(selectors.note_sharing_container_selector).addClass('hide');
+            }
         });
 
         //delete note sharing when cross is clicked
         $note_sharing_form.find(selectors.note_sharing_delete_selector).click(function(){
             var $element = $(this).closest(selectors.note_sharing_list_element_container),
-                user_full_name = $element.find(selectors.note_sharing_list_element_name).text();
-            response = confirm("Are you sure you want to remove " + user_full_name + " from shared list?");
+                user_full_name = $element.find(selectors.note_sharing_list_element_name).text(),
+                response = confirm("Are you sure you want to remove " + user_full_name + " from shared list?");
             if(response){
                 $.ajax({
                     url: $element.data('delete_url'),
                     method: 'delete',
                     dataType: 'json'
-                }).done(function(data){
+                }).done(function(){
                     $element.remove();
-                    $note_shared_list_container = $note_sharing_form.find(
+                    var $note_shared_list_container = $note_sharing_form.find(
                             selectors.note_shared_list_container
                     );
                     if($note_shared_list_container.find('li').length === 0){

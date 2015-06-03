@@ -19,14 +19,14 @@ SearchModule = function () {
                     data: {search_string: searchString},
                     dataType: 'html'
                 }).done(function (searchResultsHtml) {
-                    $searchResultsContainer.html(searchResultsHtml);
+                    $searchResultsContainer.removeClass('hide').html(searchResultsHtml);
                 }).always(function () {
                     fetch_search_results_and_populate.ajaxLock = false
                 });
             }
         }
         else {
-            $searchResultsContainer.empty();
+            $searchResultsContainer.addClass('hide').empty();
         }
     }
 
@@ -48,6 +48,12 @@ SearchModule = function () {
                     thisInstance.constants.urls.search_autocomplete_url
             );
 
+        });
+
+        $(document).click(function(e){
+            if(!$(e.target).is(selectors.search_box_selector+','+selectors.search_box_selector+' *,'+selectors.search_results_container+selectors.search_results_container+' *')){
+                $searchResultsContainer.addClass('hide').empty();
+            }
         });
     };
 };

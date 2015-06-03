@@ -1,8 +1,15 @@
 <% content_for :content do %>
-    <div class="column col-md-3 col-sm-3">
-      <%= select_tag(:results_filter, options_for_select(@select_filter_options, @default_selected_filter), :class => 'js_search_filter', :data => {:url => url_for(:controller => 'search', :action => 'detailed_search_results')}) %>
+    <div class="column col-md-3 col-sm-3 side_bar">
+      <hr/>
+      <ul class="search_filter_list js_search_filter">
+        <% @select_filter_options.each do |option| %>
+            <li>
+              <a data-value="<%= option %>" <% if option == @default_selected_filter %>class="selected"<% end %>><%= option %></a>
+            </li>
+        <% end %>
+      </ul>
     </div>
-    <div class="js_results_container column col-md-9 col-sm-9">
+    <div class="js_results_container column col-md-9 col-sm-9 main_sub_content">
       <%= render :partial => 'search/search_results', :locals => {:@result => @result} %>
     </div>
 <% end %>

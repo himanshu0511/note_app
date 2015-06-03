@@ -1,13 +1,35 @@
-<div>
-  <div>
-    <% @users.each do |user| %>
-        <%= render :partial => user.get_search_result_partial_path, :locals => {:object => user} %>
-    <% end %>
-  </div>
-  <div>
-    <% @notes.each do |note| %>
-        <%= render :partial => note.get_search_result_partial_path, :locals => {:object => note} %>
-    <% end %>
-  </div>
-  <a href="<%= url_for(:controller => 'search', :action => 'detailed_search_results', :search_string => params[:search_string]) %>">View All Results</a>
-</div>
+<% if @users.any? %>
+    <dl>
+      <dt>
+      <h5>Users</h5>
+      </dt>
+      <dd>
+        <ul class="results">
+          <% @users.each do |user| %>
+              <%= render :partial => user.get_search_result_partial_path, :locals => { :object => user } %>
+          <% end %>
+        </ul>
+      </dt>
+    </dl>
+<% end %>
+<% if @notes.any? %>
+    <dl>
+      <dt>
+      <h5> Notes</h5>
+      </dt>
+      <dd>
+        <ul class="results">
+          <% @notes.each do |note| %>
+              <%= render :partial => note.get_search_result_partial_path, :locals => { :object => note, :truncate_to_length => @truncate_to_length } %>
+          <% end %>
+        </ul>
+      </dd>
+    </dl>
+<% end %>
+<% if @users.any? or @notes.any? %>
+    <a href="<%= url_for(:controller => 'search', :action => 'detailed_search_results', :search_string => @search_string) %>">View
+      All Results
+    </a>
+<% else %>
+    <h5>No match found!</h5>
+<% end %>

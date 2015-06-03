@@ -3,12 +3,15 @@
       <% @notes.each do |note| %>
           <li class="note_element js_note_element">
             <a href="<%= note_path(note.id) %>">
-              <div class="note_heading"><%= note.heading %></div>
-              <div class="note_body"><%= note.body %></div>
+              <dl>
+                <dt class="note_heading"><%= note.heading %></dt>
+                <dd class="note_body"><%= note.body.truncate(@truncate_to_length, :seperator => /\s/) %></dd>
+              </dl>
             </a>
           </li>
       <% end %>
     </ul>
+    <%= will_paginate @notes, :class => 'js_pagination pagination' %>
 <% else %>
     <h4>No Notes defined!</h4>
 <% end %>

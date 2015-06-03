@@ -7,6 +7,9 @@ class NotesController < ApplicationController
   before_filter :authorize_destroy, :only => [:destroy]
   before_filter :authorize_destroy_shared_user, :only => [:destroy_shared_user]
 
+  PER_PAGE = 8
+  TRUNCATE_TO_LENGTH = 50
+
   def index
     @note = Note.new
     respond_to do |format|
@@ -91,7 +94,9 @@ class NotesController < ApplicationController
     else
       @selected_filter_option = params[:filter].to_i
     end
-    @notes = Note.filter(current_user, @selected_filter_option)
+    @truncate_to_length = TRUNCATE_TO_LENGTH
+    page_to_display = params.has_key?(:page) ? params[:page] : 1
+    @notes = Note.filter(current_user, @selected_filter_option).paginate(:per_page => PER_PAGE, :page => page_to_display)
     respond_to do |format|
       format.html { render :partial => 'note_list' }
       format.json { render json: @notes }

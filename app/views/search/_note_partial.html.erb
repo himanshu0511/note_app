@@ -1,6 +1,8 @@
-<a href="<%= note_path(object.id) %>">
-  <div>
-    <span><%= object.heading %></span>
-    <span><%= object.body %></span>
-  </div>
-</a>
+<li>
+  <a href="<%= note_path(object.id) %>">
+    <dl>
+      <dt class="note_heading"><%= object.heading %></dt>
+      <dd class="note_body"><%= object.body.truncate(truncate_to_length, :seperator => /\s/) %></dd>
+    </dl>
+  </a>
+</li>

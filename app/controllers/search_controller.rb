@@ -1,30 +1,40 @@
 class SearchController < ApplicationController
   PER_PAGE_RESULTS_LIMIT = 3
-  USERS = 1
-  NOTES = 2
-  ALL = 3
   CLASS_TO_SEARCH = {
-      ALL => [User, Note],
-      USERS => [User],
-      NOTES => [Note]
+      'All' => [User, Note],
+      'Users' => [User],
+      'Notes' => [Note]
   }
-  CLASS_TO_SEARCH.default = CLASS_TO_SEARCH[ALL]
-  SEARCH_FILTER_OPTIONS = [['All', ALL], ['Users', USERS], ['Notes', NOTES]]
-  SEARCH_RESULTS_PAGE_LIMIT = 5
+  SEARCH_RESULTS_PAGE_LIMIT = 7
+  TRUNCATE_TO_SMALL_LENGTH = 25
+  TRUNCATE_TO_LENGTH = 200
+
+  def sanitize_search_string(search_string)
+    search_string = params[:search_string].gsub(/[^a-zA-Z0-9\-\._\s]/, "")
+  end
 
   def search_autocomplete
-    @users = User.search params[:search_string], :per_page => PER_PAGE_RESULTS_LIMIT, :ranker => :bm25
-    @notes = Note.search params[:search_string], :per_page => PER_PAGE_RESULTS_LIMIT, :ranker => :bm25
+    @search_string = sanitize_search_string(params[:search_string])
+    @truncate_to_length = TRUNCATE_TO_SMALL_LENGTH
+    search_argument = @search_string.strip.blank? ? '' : '*' + @search_string + '*'
+    @users = User.search search_argument, :per_page => PER_PAGE_RESULTS_LIMIT, :ranker => :bm25
+    @notes = Note.search search_argument, :per_page => PER_PAGE_RESULTS_LIMIT, :ranker => :bm25
     render :partial => 'search/search_auto_complete_html'
   end
 
   def detailed_search_results
-    @default_selected_filter = ALL
-    @select_filter_options = SEARCH_FILTER_OPTIONS
+    @select_filter_options = CLASS_TO_SEARCH.keys
+    @default_selected_filter = @select_filter_options.first # 'ALL'
     @page_to_display = params.has_key?(:page) ? params[:page] : 1
+    @truncate_to_length = TRUNCATE_TO_LENGTH
+
+
+    @search_string = sanitize_search_string(params[:search_string])
+    search_argument = @search_string.strip.blank? ? '' : '*' + @search_string + '*'
+    filter = params.has_key?(:filter) ? params[:filter] : @default_selected_filter
     @results = ThinkingSphinx.search(
-        params[:search_string],
-        :classes => CLASS_TO_SEARCH[params[:filter].to_i],
+        search_argument,
+        :classes => CLASS_TO_SEARCH[filter],
         :ranker => :bm25,
         :per_page => SEARCH_RESULTS_PAGE_LIMIT,
         :page => @page_to_display

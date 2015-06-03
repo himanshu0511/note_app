@@ -11,48 +11,48 @@
         </div>
     <% end %>
     <% if @note.new_record? or @note.created_by_id == current_user.id %>
-        <button class="js_sharing_options_button" type="button">Note Accessibility and Sharing Options</button>
-        <div class="hide js_note_sharing_container">
-          <div class="field">
-            <%= form.label :accessibility %><br/>
+        <button class="js_sharing_options_button custom_button note_sharing_button pull-right" type="button">Sharing Options</button>
+        <div class="hide js_note_sharing_container note_sharing_container">
+          <div class="pull-right"><a class="js_close_note_sharing_dialog">X</a></div>
+          <div class="form-group">
+            <%= form.label :accessibility %>
             <%= form.select :accessibility, Note::ACCESSIBILITY_OPTIONS %>
           </div>
           <% unless @shared_users.nil? %>
-              <div class="js_note_shared_list_container">
+              <div class="js_note_shared_list_container note_shared_list_container">
                 <h5>Note Shared With</h5>
-                <ul>
+                <ul class="note_shared_list">
                   <% @shared_users.each do |user| %>
                       <li
                         class="js_note_sharing_list_element"
                         data-delete_url = "<%= url_for :controller => 'notes', :action => 'destroy_shared_user', :note_id => @note.id, :user_id => user.id %>"
                         >
-                        <span class="js_note_sharing_list_element_name"><%= user.full_name %></span>
-                        <span><%= user.email %></span>
+                        <div class="pull-left">
+                        <div class="js_note_sharing_list_element_name"><%= user.full_name %></div>
+                        <div><%= user.email %></div>
+                        </div>
                         <% if current_user.id == @note.created_by_id %>
-                            <span class="js_note_sharing_delete">X</span>
+                            <div class="js_note_sharing_delete pull-right"><a>X</a></div>
                         <% end %>
                       </li>
                   <% end %>
                 </ul>
               </div>
           <% end %>
-          <div class="field">
-            <%= form.label :share_with %><br/>
+          <div class="form-group">
+            <%= form.label :share_with %>
             <%= form.text_field :share_with %>
           </div>
         </div>
-        <hr>
     <% end %>
 
-    <div class="field">
-      <%= form.label :heading %><br/>
-      <%= form.text_field :heading %>
+    <div class="form-group">
+      <%= form.text_field :heading, :class => "note_heading", :placeholder => 'Heading' %>
     </div>
-    <div class="field">
-      <%= form.label :body %><br/>
-      <%= form.text_area :body %>
+    <div class="form-group">
+      <%= form.text_area :body, :class => "note_body", :placeholder => 'Enter text here ...' %>
     </div>
     <div class="actions">
-      <%= form.submit %>
+      <%= form.submit nil, :class => "custom_button" %>
     </div>
 <% end %>
