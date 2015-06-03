@@ -16,3 +16,4 @@
 .idea
 sw.?
 db/*
+config/email_settings.yml
