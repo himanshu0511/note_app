@@ -3,10 +3,10 @@
 == Getting started
 
 1. Clone repository with command git git@github.com:himanshu0511/note_app.git
-2. For production enviorment make file config/email_settings.yml from file config/email_settings.yml.sample with correct values filled in.
-3. Run data migrations with command rake db:create and db:migrate
-4. run rake task rake ts:index to generate thinking sphinx indexes
-5. Start Thinking Sphinix using command rake ts:start
-6. run server using command rails server
+2. For production enviorment make file 'config/email_settings.yml' from file 'config/email_settings.yml.sample' with correct values filled in.
+3. Run data migrations with command 'rake db:create' and 'rake db:migrate'
+4. run rake task with command 'rake ts:index' to generate thinking sphinx indexes
+5. Start Thinking Sphinix using command 'rake ts:start'
+6. run server using command 'rails server'
 
-Note: on development enviorment you can use mail catcher to recieve mails sent by app
+Note: on development enviorment you can use mailcatcher to recieve mails sent by app
