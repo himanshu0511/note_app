@@ -4,7 +4,7 @@
       <ul class="search_filter_list js_search_filter">
         <% @select_filter_options.each do |option| %>
             <li>
-              <a data-value="<%= option[1] %>" <% if option[1] == @default_selected_filter %>class="selected"<% end %>><%= option[0] %></a>
+              <a data-value="<%= option %>" <% if option == @default_selected_filter %>class="selected"<% end %>><%= option %></a>
             </li>
         <% end %>
       </ul>

@@ -27,7 +27,11 @@
         </dd>
       </dl>
   <% end %>
-  <a href="<%= url_for(:controller => 'search', :action => 'detailed_search_results', :search_string => params[:search_string]) %>">View
-    All Results
-  </a>
+  <% if @users.any? or @notes.any? %>
+      <a href="<%= url_for(:controller => 'search', :action => 'detailed_search_results', :search_string => @search_string) %>">View
+        All Results
+      </a>
+      <% else %>
+  <h5>No match found!</h5>
+  <% end %>
 </div>
