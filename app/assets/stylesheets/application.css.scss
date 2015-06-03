@@ -13,7 +13,6 @@
  */
 @import "bootstrap";
 @import "bootstrap/theme";
-@import "compass_twitter_bootstrap";
 
 body {
   background-color: #f6f6f6;
@@ -35,10 +34,10 @@ body {
 }
 
 .user_form_container {
-  background-color: #ffffff;
+  background-color: #f9f9f9;
   width: 350px;
   margin: 20px auto;
-  padding: 20px;
+  padding: 42px;
   background-clip: border-box;
   border-radius: 3px;
   border: transparent;
@@ -51,8 +50,10 @@ form {
   .form-group {
     label {
       color: #555555;
+      display: block;
     }
     input {
+      display: block;
       font-size: 14px;
       border-radius: 3px;
       border-style: groove;
@@ -101,7 +102,7 @@ form {
 .search_results_container{
   color: #808394;
   margin-top: 31px;
-  margin-left: 78px;
+  margin-left: 328px;
   padding: 0px;
   position: absolute;
   z-index: 100;
@@ -192,9 +193,24 @@ form {
       appearance:none;
       cursor:pointer;
     }
+    .search_filter_list {
+      list-style: none;
+      li {
+        text-indent: 20px;
+        a {
+          color: white;
+          display: block;
+          text-decoration: none;
+          &.selected{
+            background-color: #000;
+          }
+        }
+      }
+    }
+
     #notes_list_sidebar_container {
       height: 100%;
-      .notes_list {
+      .notes_list{
         list-style: none;
         li {
           text-indent: 20px;
@@ -202,9 +218,29 @@ form {
             color: white;
             display: block;
             text-decoration: none;
+            &.selected{
+              background-color: #000;
+            }
           }
         }
       }
+      .pagination {
+        margin-left: 15px;
+        color: white;
+        a{
+          color: white;
+        }
+      }
+    }
+  }
+}
+.note_shared_list_container{
+  .note_shared_list{
+    li{
+      background-color: #f9f9f9;
+      background-clip: border-box;
+      border-radius: 3px;
+      border: transparent;
     }
   }
 }
