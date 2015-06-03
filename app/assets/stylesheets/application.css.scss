@@ -63,20 +63,40 @@ form {
       //line-height: 12px;
       min-width: 266px;
     }
-  }
-  .custom_button {
-    min-width: 266px;
-    background-color: #0079c2;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    padding: 9px 23px;
-    text-decoration: none;
+    select{
+      padding:3px;
+      -webkit-border-radius:4px;
+      -moz-border-radius:4px;
+      border-radius:4px;
+      -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+      -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+      box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+      background: #f8f8f8;
+      color:#888;
+      border:none;
+      outline:none;
+      display: inline-block;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      appearance:none;
+      cursor:pointer;
 
-    :active, :hover {
-      position: relative;
-      top: 1px;
     }
+  }
+}
+
+.custom_button.custom_button {
+  min-width: 266px;
+  background-color: #0079c2;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 9px 23px;
+  text-decoration: none;
+
+  :active, :hover {
+    position: relative;
+    top: 1px;
   }
 }
 
@@ -89,8 +109,8 @@ form {
     color: inherit;
   }
   .search_input {
-    margin: 5px 8px;
-    color: darkslateblue;
+    margin: 5px 0px -22px 90px;
+    color: #444444;
   }
   .search_input_label {
     margin-top: 3px;
@@ -100,18 +120,27 @@ form {
   }
 }
 .search_results_container{
-  color: #808394;
+  color: #373535;
+  width: 300px;
   margin-top: 31px;
-  margin-left: 328px;
-  padding: 0px;
+  margin-left: 255px;
+  padding: 3px;
   position: absolute;
   z-index: 100;
   background-color: #ffffff;
+  border: solid rgb(228, 227, 227);
+  border-width: thin;
+  box-shadow: 2px 17px 30px #888888;
   h5{
-    padding: 8px;
+    padding: 6px;
+    color: #373535;
+  }
+  dl{
+    padding-bottom: 5px;
+    margin-bottom: 5px;
   }
   .results{
-    padding-left: 12px;
+    padding-left: 8px;
     li {
       display: block;
       :first-child {
@@ -148,9 +177,7 @@ form {
     position: relative;
     margin: 0 -1px;
     padding: 6px 8px 6px 10px;
-    color: #808394;
     font-weight: 500;
-    text-shadow: 0 1px #aaaaaa;
     border: 1px solid transparent;
     border-radius: 3px;
     span { font-weight: 200 }
@@ -172,6 +199,13 @@ form {
     padding: 20px;
     background-clip: border-box;
     min-height: 575px;
+    .note_heading.note_heading {
+      min-width: 620px;
+
+    }
+    .note_body.note_body {
+      width: 620px;
+    }
   }
   .side_bar {
     .note_filter_selector {
@@ -195,9 +229,11 @@ form {
     }
     .search_filter_list {
       list-style: none;
+      font-size: 14px;
       li {
-        text-indent: 20px;
+        padding-bottom: 5px;
         a {
+          padding: 5px;
           color: white;
           display: block;
           text-decoration: none;
@@ -213,8 +249,12 @@ form {
       .notes_list{
         list-style: none;
         li {
-          text-indent: 20px;
+          padding-bottom: 5px;
+          dl{
+            margin-bottom: 5px;
+          }
           a {
+            padding: 5px;
             color: white;
             display: block;
             text-decoration: none;
@@ -234,13 +274,120 @@ form {
     }
   }
 }
-.note_shared_list_container{
-  .note_shared_list{
-    li{
-      background-color: #f9f9f9;
-      background-clip: border-box;
-      border-radius: 3px;
-      border: transparent;
+
+.note_sharing_button.note_sharing_button {
+  min-width: 170px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.note_display_body {
+  background-color: white;
+  border: solid rgba(136, 136, 136, 0.12);
+  border-radius: 1px;
+  border-width: thin;
+  margin-botton: 20px;
+}
+.note_display_heading {
+  margin-bottom: 30px;
+}
+
+.note_sharing_container {
+  position: absolute;
+  z-index: 99;
+  background-color: #FFFFFF;
+  background-clip: border-box;
+  margin-left: -15px;
+  margin-top: 42px;
+  padding: 37px;
+  border: solid #e4e3e3;
+  border-width: thin;
+  box-shadow: 0px 9px 30px #888888;
+  width: 611px;
+  .note_shared_list_container {
+    .note_shared_list {
+      list-style-type: none;
+      padding: 2px;
+      width: 100%;
+      li {
+        width: 48%;
+        display:inline-block;
+        margin-bottom: 4px;
+        margin-right: 4px;
+        background-clip: border-box;
+        border-radius: 3px;
+        border: solid #888888;
+        border-width: thin;
+        padding-left: 12px;
+        padding-top: 5px;
+        padding-bottom: 2px;
+        padding-right: 7px;
+        height: 50px;
+        box-shadow: 1px 1px 6px #888888;
+        background-color: rgba(212, 229, 239, 0.09);
+      }
+    }
+  }
+}
+
+.detailed_search_results {
+  color: #373535;
+  margin-top: 31px;
+  padding: 3px;
+  z-index: 100;
+  background-color: #ffffff;
+  h5 {
+    padding: 6px;
+    color: #373535;
+  }
+  dl {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+  }
+  li {
+    display: block;
+    :first-child {
+      margin-top: -1px;
+      :before {
+        border-bottom: 5px solid #c4c7d7;
+        top: -11px;
+      }
+      :after {
+        border-bottom: 5px solid #fdfdfd;
+        top: -10px;
+      }
+    }
+    :first-child:before, :first-child:after {
+      display: block;
+      content: '';
+      width: 0;
+      height: 0;
+      position: absolute;
+      left: 50%;
+      margin-left: -5px;
+      border: 5px outset transparent;
+      :hover {
+        display: none;
+      }
+    }
+    :last-child {
+      margin-bottom: -1px;
+    }
+  }
+  a {
+    display: block;
+    position: relative;
+    margin: 0 -1px;
+    padding: 6px 8px 6px 10px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    span {
+      font-weight: 200
+    }
+    &:hover {
+      text-decoration: none;
+      color: #444444;
+      background-color: #aaaaaa;
     }
   }
 }

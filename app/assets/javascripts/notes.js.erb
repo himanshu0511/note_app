@@ -8,6 +8,7 @@ NoteModule = function () {
             notes_list_container_selector: '#notes_list_sidebar_container',
             note_sharing_button_selector: '.js_sharing_options_button',
             note_sharing_container_selector: '.js_note_sharing_container',
+            note_sharing_container_close_link_selector: '.js_close_note_sharing_dialog',
             note_sharing_delete_selector: '.js_note_sharing_delete',
             note_sharing_list_element_container: '.js_note_sharing_list_element',
             note_sharing_list_element_name: '.js_note_sharing_list_element_name',
@@ -54,8 +55,13 @@ NoteModule = function () {
         var $note_sharing_form = $(selectors.note_form_selector);
 
         //show and hide note sharing div when note sharing button is clicked
-        $note_sharing_form.find(selectors.note_sharing_button_selector).click(function(){
+        $note_sharing_form.find(selectors.note_sharing_button_selector+','+selectors.note_sharing_container_close_link_selector).click(function(){
             $note_sharing_form.find(selectors.note_sharing_container_selector).toggleClass('hide');
+        });
+        $(document).click(function(e){
+            if(!$(e.target).is(selectors.note_sharing_container_selector+','+selectors.note_sharing_container_selector+' *,'+selectors.note_sharing_button_selector)){
+                $note_sharing_form.find(selectors.note_sharing_container_selector).addClass('hide');
+            }
         });
 
         //delete note sharing when cross is clicked

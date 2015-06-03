@@ -2,7 +2,7 @@
   <a href="<%= note_path(object.id) %>">
     <dl>
       <dt class="note_heading"><%= object.heading %></dt>
-      <dd class="note_body"><%= object.body.truncate(25, :seperator => /\s/) %></dd>
+      <dd class="note_body"><%= object.body.truncate(truncate_to_length, :seperator => /\s/) %></dd>
     </dl>
   </a>
 </li>

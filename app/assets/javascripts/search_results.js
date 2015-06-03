@@ -37,7 +37,7 @@ SearchResultsModule = function () {
         var $searchResultsContainer = $(selectors.search_results_container_selector);
         $searchFilter.on('click', function () {
             var $this = $(this),
-                filterValue = parseInt($this.data('value'));
+                filterValue = $this.data('value');
             fetch_filtered_results_and_populate({
                 searchFilter: filterValue,
                 $searchResultContainer: $searchResultsContainer,
