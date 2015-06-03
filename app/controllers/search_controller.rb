@@ -5,18 +5,17 @@ class SearchController < ApplicationController
       'Users' => [User],
       'Notes' => [Note]
   }
-  CLASS_TO_SEARCH.default = CLASS_TO_SEARCH.keys.first #'All'
   SEARCH_RESULTS_PAGE_LIMIT = 5
 
   def sanitize_search_string(search_string)
     search_string = params[:search_string].gsub(/[^a-zA-Z0-9\-\._\s]/, "")
-    search_string.strip.blank? ? '' : '*' + search_string + '*'
   end
 
   def search_autocomplete
     @search_string = sanitize_search_string(params[:search_string])
-    @users = User.search @search_string, :per_page => PER_PAGE_RESULTS_LIMIT, :ranker => :bm25
-    @notes = Note.search @search_string, :per_page => PER_PAGE_RESULTS_LIMIT, :ranker => :bm25
+    search_argument = @search_string.strip.blank? ? '' : '*' + @search_string + '*'
+    @users = User.search search_argument, :per_page => PER_PAGE_RESULTS_LIMIT, :ranker => :bm25
+    @notes = Note.search search_argument, :per_page => PER_PAGE_RESULTS_LIMIT, :ranker => :bm25
     render :partial => 'search/search_auto_complete_html'
   end
 
@@ -26,9 +25,11 @@ class SearchController < ApplicationController
     @page_to_display = params.has_key?(:page) ? params[:page] : 1
 
     @search_string = sanitize_search_string(params[:search_string])
+    search_argument = @search_string.strip.blank? ? '' : '*' + @search_string + '*'
+    filter = params.has_key?(:filter) ? params[:filter] : @default_selected_filter
     @results = ThinkingSphinx.search(
-        @search_string,
-        :classes => CLASS_TO_SEARCH[params[:filter]],
+        search_argument,
+        :classes => CLASS_TO_SEARCH[filter],
         :ranker => :bm25,
         :per_page => SEARCH_RESULTS_PAGE_LIMIT,
         :page => @page_to_display
