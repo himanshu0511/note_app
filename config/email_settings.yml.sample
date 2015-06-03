@@ -1,12 +1,3 @@
-development:
-  :address: <server address>
-  :port: <server port>,
-  :domain: <server domain>
-  :user_name: <user name>
-  :password: <password>
-  :authentication: plain
-  :enable_starttls: true
-
 production:
   :address: <server address>
   :port: <server port>,
