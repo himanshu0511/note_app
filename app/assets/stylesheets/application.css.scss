@@ -48,6 +48,7 @@ body {
 
 form {
   .form-group {
+    margin-bottom: 10px;
     label {
       color: #555555;
       display: block;
@@ -60,7 +61,6 @@ form {
       padding: 8px 6px;
       color: #444444;
       height: 30px;
-      //line-height: 12px;
       min-width: 266px;
     }
     select{
@@ -111,6 +111,11 @@ form {
   .search_input {
     margin: 5px 0px -22px 90px;
     color: #444444;
+    width: 318px;
+    border-radius: 8px;
+    border-style: solid;
+    padding: 6px 14px;
+    outline: transparent;
   }
   .search_input_label {
     margin-top: 3px;
@@ -122,13 +127,13 @@ form {
 .search_results_container{
   color: #373535;
   width: 300px;
-  margin-top: 31px;
-  margin-left: 255px;
+  margin-top: 39px;
+  margin-left: 263px;
   padding: 3px;
   position: absolute;
   z-index: 100;
   background-color: #ffffff;
-  border: solid rgb(228, 227, 227);
+  border: solid #e4e3e3;
   border-width: thin;
   box-shadow: 2px 17px 30px #888888;
   h5{
@@ -200,36 +205,51 @@ form {
     background-clip: border-box;
     min-height: 575px;
     .note_heading.note_heading {
-      min-width: 620px;
+      min-width: 440px;
 
     }
     .note_body.note_body {
-      width: 620px;
+      width: 654px;
+      margin-top: 14px;
+      height: 400px;
     }
   }
   .side_bar {
+    color: white;
+    .new_note_button{
+      background: white;
+      color: black;
+      min-width: 80px;
+      margin-left: 33px;
+      margin-bottom: 19px;
+      margin-top: 5px;
+      padding: 4px 6px 7px 3px;
+    }
     .note_filter_selector {
-      padding:3px;
-      margin-left: 54px;
+      padding: 3px;
+      margin-left: 18px;
+      border-radius: 4px;
+      box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+      background: #f8f8f8;
+      color: #888;
+      border: none;
+      outline: none;
+      display: inline-block;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      cursor: pointer;
       -webkit-border-radius:4px;
       -moz-border-radius:4px;
       border-radius:4px;
       -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
       -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
-      box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
-      background: #f8f8f8;
-      color:#888;
-      border:none;
-      outline:none;
-      display: inline-block;
-      -webkit-appearance:none;
-      -moz-appearance:none;
-      appearance:none;
-      cursor:pointer;
     }
     .search_filter_list {
       list-style: none;
       font-size: 14px;
+      padding-left: 5px;
+      margin-top: 5px;
       li {
         padding-bottom: 5px;
         a {
@@ -245,16 +265,19 @@ form {
     }
 
     #notes_list_sidebar_container {
+      margin-top: 10px;
       height: 100%;
       .notes_list{
+        margin-top: 10px;
         list-style: none;
+        padding-left: 14px;
         li {
-          padding-bottom: 5px;
+          padding-bottom: 0px;
           dl{
-            margin-bottom: 5px;
+            margin-bottom: 0px;
           }
           a {
-            padding: 5px;
+            padding: 3px;
             color: white;
             display: block;
             text-decoration: none;
@@ -264,8 +287,15 @@ form {
           }
         }
       }
+      .note_list_info {
+        background-clip: border-box;
+        background: white;
+        color: black;
+        padding: 2px 11px;
+        border-radius: 22px;
+      }
       .pagination {
-        margin-left: 15px;
+        margin-top: 5px;
         color: white;
         a{
           color: white;
@@ -276,9 +306,13 @@ form {
 }
 
 .note_sharing_button.note_sharing_button {
-  min-width: 170px;
-  padding-left: 0px;
-  padding-right: 0px;
+  font-size: 25px;
+  background-color: #0079c2;
+  margin-right: 13px;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 13px;
+  box-shadow: 0px 0px 4px #888888;
 }
 .note_display_body {
   background-color: white;
@@ -330,7 +364,7 @@ form {
 }
 
 .detailed_search_results {
-  color: #373535;
+  color: #666;
   margin-top: 31px;
   padding: 3px;
   z-index: 100;
@@ -345,35 +379,22 @@ form {
   }
   li {
     display: block;
-    :first-child {
+    &:first-child {
       margin-top: -1px;
-      :before {
-        border-bottom: 5px solid #c4c7d7;
-        top: -11px;
-      }
-      :after {
-        border-bottom: 5px solid #fdfdfd;
-        top: -10px;
-      }
     }
-    :first-child:before, :first-child:after {
+    &:after{
+      content: "";
       display: block;
-      content: '';
-      width: 0;
-      height: 0;
-      position: absolute;
-      left: 50%;
-      margin-left: -5px;
-      border: 5px outset transparent;
-      :hover {
-        display: none;
-      }
+      height: 1px;
+      margin: 0px;
+      background: #D8D8D8;
     }
-    :last-child {
+    &:last-child {
       margin-bottom: -1px;
     }
   }
   a {
+    color: #666;
     display: block;
     position: relative;
     margin: 0 -1px;
@@ -383,6 +404,9 @@ form {
     border-radius: 3px;
     span {
       font-weight: 200
+    }
+    &:visited{
+      color: #666;
     }
     &:hover {
       text-decoration: none;

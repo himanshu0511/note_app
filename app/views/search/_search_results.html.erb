@@ -1,8 +1,8 @@
 <% if @results.any? %>
     <h3>Search Results</h3>
     <ul class="detailed_search_results">
-      <% @results.each do |result| %>
-          <%= render :partial => result.get_search_result_partial_path, :locals => { :object => result, :truncate_to_length => @truncate_to_length } %>
+      <% @results.each_with_index do |result, index| %>
+          <%= render :partial => result.get_search_result_partial_path, :locals => {:object => result, :truncate_to_length => @truncate_to_length} %>
       <% end %>
     </ul>
     <div>

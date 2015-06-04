@@ -120,4 +120,12 @@ class Note < ActiveRecord::Base
   def is_public?
     self.accessibility == PUBLIC_NOTES ? true : false
   end
+
+  def is_shared?(user)
+    NoteSharing.is_shared_with?(self, user)
+  end
+
+  def is_creator?(user)
+    self.created_by_id == user.id
+  end
 end

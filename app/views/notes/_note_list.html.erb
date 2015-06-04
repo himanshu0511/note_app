@@ -1,18 +1,17 @@
 <% unless @notes.blank? %>
+    <span class="note_list_info"><%= page_entries_info @notes %></span>
     <ul class="notes_list js_notes_list">
       <% @notes.each do |note| %>
           <li class="note_element js_note_element">
             <a href="<%= note_path(note.id) %>">
               <dl>
-                <dt class="note_heading"><%= note.heading %></dt>
-                <dd class="note_body"><%= note.body.truncate(@truncate_to_length, :seperator => /\s/) %></dd>
+                <dt><%= note.heading %></dt>
+                <dd><%= note.body.truncate(@truncate_to_length, :seperator => /\s/) %></dd>
               </dl>
             </a>
           </li>
       <% end %>
     </ul>
     <%= will_paginate @notes, :class => 'js_pagination pagination' %>
-<% else %>
-    <h4>No Notes defined!</h4>
 <% end %>
 <br/>
