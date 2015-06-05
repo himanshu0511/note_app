@@ -1,5 +1,6 @@
 <% content_for :content do %>
     <div class="side_bar column col-md-3 col-sm-3">
+      <a class="custom_button new_note_button" href="<%= new_note_path %>">+ New Note</a>
       <div>
         <%= select_tag(:filter_selected, options_for_select(Note::FILTER_OPTIONS, (@selected_filter_option or Note::ALL)), :class => "note_filter_selector") %>
       </div>

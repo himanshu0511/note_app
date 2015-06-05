@@ -15,6 +15,7 @@ class RegistrationsController < Devise::RegistrationsController
         self.resource = resource_class.confirm_by_token(confirmation_token)
         yield resource if block_given?
         if resource.errors.empty?
+          sign_in(resource_name, resource, :bypass => true)
           redirect_to root_path
         else
           render :file => 'public/404.html', :status => :not_found, :layout => false

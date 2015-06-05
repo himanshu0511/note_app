@@ -5,7 +5,7 @@ class SearchController < ApplicationController
       'Users' => [User],
       'Notes' => [Note]
   }
-  SEARCH_RESULTS_PAGE_LIMIT = 7
+  SEARCH_RESULTS_PAGE_LIMIT = 6
   TRUNCATE_TO_SMALL_LENGTH = 25
   TRUNCATE_TO_LENGTH = 200
 

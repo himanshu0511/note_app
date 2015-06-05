@@ -15,8 +15,9 @@ class Note < ActiveRecord::Base
   end
 
   scope :distinct, select("DISTINCT(`notes`.`id`), `notes`.*")
-  scope :user_public_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PUBLIC_NOTES)}
-  scope :user_private_notes, lambda { |user| where("created_by_id = ? and accessibility = ?", user.id, PRIVATE_NOTES)}
+  scope :user_created_notes, lambda { |user| where(:created_by_id => user.id)}
+  scope :user_public_notes, lambda { |user| where(:created_by_id => user.id, :accessibility => PUBLIC_NOTES)}
+  scope :user_private_notes, lambda { |user| where(:created_by_id => user.id, :accessibility => PRIVATE_NOTES)}
   scope :user_shared_notes, lambda {
                               |user| joins("LEFT JOIN `note_sharings` ON `note_sharings`.`note_id` = `notes`.`id`"
                             ).where("user_id = ?", user.id)}
@@ -114,10 +115,18 @@ class Note < ActiveRecord::Base
   end
 
   def self.filter(user, filter)
-    FILTER_TO_APPLY[filter].call(user)
+    FILTER_TO_APPLY[filter].call(user).order('updated_at DESC')
   end
 
   def is_public?
     self.accessibility == PUBLIC_NOTES ? true : false
+  end
+
+  def is_shared?(user)
+    NoteSharing.is_shared_with?(self, user)
+  end
+
+  def is_creator?(user)
+    self.created_by_id == user.id
   end
 end

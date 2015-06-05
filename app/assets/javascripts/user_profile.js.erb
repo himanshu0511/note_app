@@ -1,0 +1,90 @@
+// execute js for specific page only
+UserProfileModule = function () {
+    var thisInstance = this;
+    //page_constants
+    thisInstance.constants = {
+        selectors: {
+            notes_list_container_selector: '#notes_list_sidebar_container',
+            pagination_links_selector: '.js_pagination a',
+            change_password_button_selector: '.js_change_password_button',
+            change_password_container_selector: '.js_password_change_div_container',
+            change_password_close_link_selector: '.js_password_change_div_close_link'
+        }
+    };
+    // function to fetch notes list
+    function fetch_notes_list($notesListContainer, filter, url) {// private function
+        filter = filter || {};
+        $.ajax({
+            url: url || thisInstance.constants.urls.fetch_list_of_notes_url,
+            method: 'get',
+            data: filter,
+            dataType: 'html',
+            contentType: 'application/json'
+        }).done(function (notesListHtml) {
+            $notesListContainer.html(notesListHtml);
+
+            // bind fetching of filter note list when note filter select field is changed
+            $(thisInstance.constants.selectors.note_filter_selector).unbind('change').change(function () {
+                var data = {filter: $(this).val()};
+                fetch_notes_list($notesListContainer, data);
+            });
+            // pagination functionality
+            $notesListContainer.find(thisInstance.constants.selectors.pagination_links_selector).click(function () {
+                var url = $(this).attr('href');
+                fetch_notes_list($notesListContainer, {}, url);
+                return false;
+            });
+        });
+    }
+
+    function bind_change_password_interactions($changePasswordContainer) { // change password bindings
+        var selectors = thisInstance.constants.selectors;
+        $changePasswordContainer = $changePasswordContainer || $(selectors.change_password_container_selector);
+        $(selectors.change_password_button_selector).click(function () {
+            if($changePasswordContainer.hasClass('hide')){
+                fetch_change_password_form($changePasswordContainer, $(this).data('url'));
+            }
+            else{
+                $changePasswordContainer.empty().addClass('hide');
+            }
+        });
+
+        // binding fetching of change password html when change password button is clicked
+        $(selectors.note_sharing_container_close_link_selector).click(function () {
+            $changePasswordContainer.empty().addClass('hide');
+        });
+    }
+
+    function fetch_change_password_form($changePasswordDiv, url) { // private function
+        $.ajax({
+            url: url,
+            method: 'get',
+            dataType: 'html'
+        }).done(function (changePasswordHtml) {
+            $changePasswordDiv.html(changePasswordHtml).removeClass('hide');
+            $changePasswordDiv.find('form').ajaxForm({
+                target: $changePasswordDiv,
+                success: function(response){
+                    if(response.trim() === ""){
+                        $changePasswordDiv.empty().addClass('hide');
+                    }
+                    else{
+                        bind_change_password_interactions($changePasswordDiv);
+                    }
+                }
+            });
+        });
+    }
+
+    // tasks and binding on page intialization
+    thisInstance.init = function (page) {
+        page = $.extend(true, page || {}, {constants: {selectors: {}, urls: {}}});
+        thisInstance.constants = $.extend(true, thisInstance.constants, page.constants);
+        var selectors = thisInstance.constants.selectors;
+
+        // fetch all notes belonging to user and populate notes list container
+        fetch_notes_list($(selectors.notes_list_container_selector));
+
+        bind_change_password_interactions();
+    };
+};

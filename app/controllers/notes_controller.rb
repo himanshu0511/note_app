@@ -27,6 +27,17 @@ class NotesController < ApplicationController
     end
   end
 
+  # GET /notes/new
+  # GET /notes/new.json
+  def new
+    @note = Note.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @note }
+    end
+  end
+
   # GET /notes/1/edit
   def edit
     @shared_users = User.note_shared_with(@note)
@@ -103,39 +114,54 @@ class NotesController < ApplicationController
     end
   end
 
+  def note_list_for_profile
+    page_to_display = params.has_key?(:page) ? params[:page] : 1
+    @truncate_to_length = TRUNCATE_TO_LENGTH
+    if params[:id] == current_user.id
+      @notes = Note.user_created_notes(current_user)
+    else
+      @notes = Note.where(:created_by_id => params[:id], :accessibility => Note::PUBLIC_NOTES)
+    end
+    @notes = @notes.paginate(:per_page => PER_PAGE, :page => page_to_display)
+    respond_to do |format|
+      format.html { render :partial => 'note_list' }
+      format.json { render json: @notes }
+    end
+  end
+
   protected
+  def respond_unauthorized
+    respond_to do |format|
+      format.html { render :file => 'public/content_unavailable', :status => :unauthorized }
+      format.json { render :nothing => true, :status => :unauthorized }
+    end
+  end
+
   def authorize_display
     @note = Note.find(params[:id])
-    unless (
-    @note.is_public? ||
-        current_user.id == @note.created_by_id ||
-        NoteSharing.where(:note_id => @note.id, :user_id => current_user.id).count() > 0
-    )
-      render :file => 'public/404.html', :status => :not_found, :layout => false
+    unless @note.is_public? || @note.is_creator?(current_user) || @note.is_shared?(current_user)
+     respond_unauthorized
     end
   end
 
   def authorize_update
     @note = Note.find(params[:id])
-    unless (
-    current_user.id == @note.created_by_id ||
-        NoteSharing.where(:note_id => @note.id, :user_id => current_user.id).count() > 0
-    )
-      render :file => 'public/404.html', :status => :not_found, :layout => false
+    unless @note.is_creator?(current_user) || @note.is_shared?(current_user)
+      respond_unauthorized
     end
   end
 
   def authorize_destroy
     @note = Note.find(params[:id])
-    unless current_user.id == @note.created_by_id
-      render :file => 'public/404.html', :status => :not_found, :layout => false
+    unless @note.is_creator?(current_user)
+      respond_unauthorized
     end
   end
 
   def authorize_destroy_shared_user
     @note = Note.find(params[:note_id])
-    unless current_user.id == @note.created_by_id
-      render :file => 'public/404.html', :status => :not_found, :layout => false
+    unless @note.is_creator?(current_user)
+     respond_unauthorized
     end
   end
 end
