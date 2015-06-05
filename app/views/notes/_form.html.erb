@@ -12,7 +12,7 @@
     <% end %>
     <% if @note.new_record? or @note.created_by_id == current_user.id %>
         <span class="js_sharing_options_button glyphicon glyphicon-share note_sharing_button pull-right"></span>
-        <div class="hide js_note_sharing_container note_sharing_container">
+        <div class="hide js_note_sharing_container custom_modal">
           <div class="pull-right"><a class="js_close_note_sharing_dialog">X</a></div>
           <div class="form-group">
             <%= form.label :accessibility %>

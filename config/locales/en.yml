@@ -10,12 +10,12 @@ en:
     page_entries_info:
       single_page:
         zero:  "No %{model} found"
-        one:   "Displaying 1 %{model}"
-        other: "Displaying all %{count} %{model}"
+        one:   "Showing 1 %{model}"
+        other: "Showing all %{count} %{model}"
       single_page_html:
         zero:  "No %{model} found"
-        one:   "Displaying <b>1</b> %{model}"
-        other: "Displaying <b>all&nbsp;%{count}</b> %{model}"
+        one:   "Showing <b>1</b> %{model}"
+        other: "Showing <b>all&nbsp;%{count}</b> %{model}"
 
       multi_page: "Showing %{model} %{from} - %{to} of %{count}"
       multi_page_html: "Showing %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b>"

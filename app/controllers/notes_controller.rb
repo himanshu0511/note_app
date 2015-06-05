@@ -114,6 +114,21 @@ class NotesController < ApplicationController
     end
   end
 
+  def note_list_for_profile
+    page_to_display = params.has_key?(:page) ? params[:page] : 1
+    @truncate_to_length = TRUNCATE_TO_LENGTH
+    if params[:id] == current_user.id
+      @notes = Note.user_created_notes(current_user)
+    else
+      @notes = Note.where(:created_by_id => params[:id], :accessibility => Note::PUBLIC_NOTES)
+    end
+    @notes = @notes.paginate(:per_page => PER_PAGE, :page => page_to_display)
+    respond_to do |format|
+      format.html { render :partial => 'note_list' }
+      format.json { render json: @notes }
+    end
+  end
+
   protected
   def respond_unauthorized
     respond_to do |format|

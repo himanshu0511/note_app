@@ -1,43 +1,71 @@
-<div class="main_sub_content">
-  <div>
-    <span>Full Name</span>
-    <%= @user.full_name %>
-  </div>
-  <div>
-    <span>Email</span>
-    <%= @user.email %>
-  </div>
-  <% if @user.id == current_user.id %>
-      <hr>
-      <button class="custom_button" type="button">Change Password</button>
-      <div class="hide js_password_change_div_container">
+<% content_for :content do %>
+    <div class="side_bar column col-md-3 col-sm-3">
+      <div id="notes_list_sidebar_container" class="user_profile_note_list_container">
       </div>
-  <% end %>
-  <hr>
-  <button class="custom_button" type="button">Other Information</button>
-  <div class="hide">
-    <div>
-      <span>Number of Subscribees</span>
-      <span><%= @user.subscribers.count %></span>
     </div>
-    <div>
-      <span>Number of Subscriptions</span>
-      <span><%= @user.subscribed_from.count %></span>
-    </div>
-    <div>
-      <span>Number of Public Notes</span>
-      <span><%= Note.user_public_notes(@user).count %></span>
-    </div>
-    <div>
-      <span>Number of Private Notes</span>
-      <span><%= Note.user_private_notes(@user).count %></span>
-    </div>
-    <% if current_user.id != @user.id %>
+    <div class="main_sub_content col-md-9 col-sm-9">
+      <div class="user_profile_content">
+        <% if @user.id == current_user.id %>
+            <hr>
+            <button
+                class="custom_button pull-right js_change_password_button"
+                type="button"
+                data-url="<%= url_for(:controller => 'passwords', :action => 'edit') %>"
+            >Change Password</button>
+            <div class="hide js_password_change_div_container custom_modal">
+            </div>
+        <% end %>
         <div>
-          <span>Number of Notes shared with me</span>
+          <h4>User Details</h4>
+          <span class="display_label">Full Name:</span>
+          <%= @user.full_name %>
+        </div>
+        <div>
+          <span class="display_label">Email:</span>
+          <%= @user.email %>
+        </div>
+
+        <hr/>
+        <h4>Other Information</h4>
+
+        <div>
+          <div>
+            <span class="display_label">Number of Subscribees:</span>
+            <span><%= @user.subscribers.count %></span>
+          </div>
+          <div>
+            <span class="display_label">Number of Subscriptions:</span>
+            <span><%= @user.subscribed_from.count %></span>
+          </div>
+          <div>
+            <span class="display_label">Number of Public Notes:</span>
+            <span><%= Note.user_public_notes(@user).count %></span>
+          </div>
+          <div>
+            <span class="display_label">Number of Private Notes:</span>
+            <span><%= Note.user_private_notes(@user).count %></span>
+          </div>
+          <% if current_user.id != @user.id %>
+              <div>
+                <span>Number of Notes shared with me:</span>
           <span>
             <%= NoteSharing.notes_shared(@user, current_user).count %></span>
+              </div>
+          <% end %>
         </div>
-    <% end %>
-  </div>
-</div>
+      </div>
+    </div>
+<% end %>
+<% content_for :local_scripts do %>
+    <script type="text/javascript">
+        var page = {
+            constants:{
+                urls:{
+                    fetch_list_of_notes_url: "<%= url_for(:controller => 'notes', :action => 'note_list_for_profile', :id => current_user.id) %>"
+                }
+            }
+        };
+        //execute NoteModule js on page load
+        new UserProfileModule().init(page);
+    </script>
+<% end %>

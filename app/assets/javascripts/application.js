@@ -12,5 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.form
 //= require bootstrap
 //= require_tree .

@@ -14,6 +14,7 @@ group :assets do
   gem 'autoprefixer-rails'
   gem 'sass-rails', '~> 3.2.3'
   gem 'jquery-rails'
+  gem 'jquery-form-rails'
   # gem for asset compression
   gem 'uglifier', '>= 1.0.3'
   # javascript runtime for uglifier
@@ -30,5 +31,5 @@ group :development, :test do
   gem 'hirb'
 
   # gems for testing
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails', '~> 2.14'
 end

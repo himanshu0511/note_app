@@ -8,11 +8,11 @@ NoteApp::Application.routes.draw do
                    }
   devise_scope :user do
     post 'users/set_up_details/:confirmation_token' => 'registrations#initialize_user_details'
-    get 'users/set_forgotten_password/:confirmation_token' => 'passwords#new'
-    post 'users/set_forgotten_password' => 'passwords#set_forgotten_password'
-
     authenticated do
       root to: 'notes#index'
+
+      get 'users/edit_password' => 'passwords#edit'
+      post 'users/edit_password' => 'passwords#update'
     end
 
     unauthenticated do
@@ -23,6 +23,7 @@ NoteApp::Application.routes.draw do
   authenticate :user do
     #notes
     get 'notes/list' => 'notes#user_note_list'
+    get 'user/:id/notes/list' => 'notes#note_list_for_profile'
     delete 'note_sharings/:note_id/user/:user_id' => 'notes#destroy_shared_user'
     resources :notes
 

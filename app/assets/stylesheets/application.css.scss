@@ -204,9 +204,12 @@ form {
     padding: 20px;
     background-clip: border-box;
     min-height: 575px;
+    .user_profile_content{
+      margin-left: 35px;
+      margin-top: 25px;
+    }
     .note_heading.note_heading {
       min-width: 440px;
-
     }
     .note_body.note_body {
       width: 654px;
@@ -288,10 +291,11 @@ form {
         }
       }
       .note_list_info {
+        font-size: 12px;
         background-clip: border-box;
         background: white;
         color: black;
-        padding: 2px 11px;
+        padding: 2px 15px;
         border-radius: 22px;
       }
       .pagination {
@@ -301,6 +305,9 @@ form {
           color: white;
         }
       }
+    }
+    .user_profile_note_list_container{
+      margin-top: 35px !important;
     }
   }
 }
@@ -325,7 +332,7 @@ form {
   margin-bottom: 30px;
 }
 
-.note_sharing_container {
+.custom_modal {
   position: absolute;
   z-index: 99;
   background-color: #FFFFFF;
@@ -414,4 +421,8 @@ form {
       background-color: #aaaaaa;
     }
   }
+}
+.display_label {
+  font-weight: bold;
+  padding: 0px 10px;
 }
