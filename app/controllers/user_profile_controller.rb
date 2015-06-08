@@ -1,4 +1,5 @@
 class UserProfileController < ApplicationController
+  before_filter :authenticate_user!
   # Get user-profile
   def index
     @user = current_user

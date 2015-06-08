@@ -32,4 +32,6 @@ group :development, :test do
 
   # gems for testing
   gem 'rspec-rails', '~> 2.14'
+  gem 'yaml_db'
+  gem 'factory_girl_rails', '~> 4.0'
 end
