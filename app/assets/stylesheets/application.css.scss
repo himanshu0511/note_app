@@ -47,6 +47,16 @@ body {
 }
 
 form {
+  #error_explanation{
+    border: inherit;
+  }
+  .field_with_errors {
+    background-color: inherit;
+    input, textarea, select {
+      border: solid rgb(224, 107, 107);
+      border-width: thin;
+    }
+  }
   .form-group {
     margin-bottom: 10px;
     label {
