@@ -10,9 +10,8 @@ NoteApp::Application.routes.draw do
     post 'users/set_up_details/:confirmation_token' => 'registrations#initialize_user_details'
     authenticated do
       root to: 'notes#index'
-
-      get 'users/edit_password' => 'passwords#edit'
-      post 'users/edit_password' => 'passwords#update'
+      get 'user/edit_password' => 'passwords#edit_password'
+      post 'user/update_password' => 'passwords#update_password'
     end
 
     unauthenticated do

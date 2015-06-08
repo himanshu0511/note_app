@@ -123,6 +123,9 @@ form {
     font-weight: normal;
     margin-left: 84px;
   }
+  .navigational_link {
+    margin-right: 10px;
+  }
 }
 .search_results_container{
   color: #373535;
@@ -207,6 +210,13 @@ form {
     .user_profile_content{
       margin-left: 35px;
       margin-top: 25px;
+      .user_profile_redirect_button{
+        display: block;
+        height: 33px;
+        padding: 6px 14px;
+        min-width: 147px;
+        margin-bottom: 10px;
+      }
     }
     .note_heading.note_heading {
       min-width: 440px;

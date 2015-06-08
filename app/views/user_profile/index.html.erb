@@ -7,12 +7,15 @@
       <div class="user_profile_content">
         <% if @user.id == current_user.id %>
             <hr>
-            <button
-                class="custom_button pull-right js_change_password_button"
-                type="button"
-                data-url="<%= url_for(:controller => 'passwords', :action => 'edit') %>"
-            >Change Password</button>
-            <div class="hide js_password_change_div_container custom_modal">
+            <div class="pull-right">
+              <a
+              class="custom_button user_profile_redirect_button"
+              href="<%= url_for(:controller => 'registrations', :action => 'edit') %>"
+              >Change User Details</a>
+              <a
+              class="custom_button user_profile_redirect_button"
+              href="<%= url_for(:controller => 'passwords', :action => 'edit_password') %>"
+              >Change Password</a>
             </div>
         <% end %>
         <div>
