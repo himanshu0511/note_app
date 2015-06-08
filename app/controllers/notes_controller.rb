@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
   layout 'notes'
-  # GET /notes
-  # GET /notes.json
+
+  before_filter :authenticate_user!
   before_filter :authorize_display, :only => [:show]
   before_filter :authorize_update, :only => [:edit, :update]
   before_filter :authorize_destroy, :only => [:destroy]
@@ -10,6 +10,8 @@ class NotesController < ApplicationController
   PER_PAGE = 8
   TRUNCATE_TO_LENGTH = 50
 
+  # GET /notes
+  # GET /notes.json
   def index
     @note = Note.new
     respond_to do |format|
@@ -68,7 +70,12 @@ class NotesController < ApplicationController
   # PUT /notes/1.json
   def update
     respond_to do |format|
+      created_by_id = @note.created_by_id
       if @note.update_attributes(params[:note])
+        if @note.created_by_id != created_by_id
+          @note.created_by_id = created_by_id
+          @note.save
+        end
         format.html { redirect_to @note, notice: 'Note was successfully updated.' }
         format.json { head :no_content }
       else
@@ -131,9 +138,10 @@ class NotesController < ApplicationController
 
   protected
   def respond_unauthorized
+    # http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-unauthorized-http-responses
     respond_to do |format|
-      format.html { render :file => 'public/content_unavailable', :status => :unauthorized }
-      format.json { render :nothing => true, :status => :unauthorized }
+      format.html { render :file => 'public/content_unavailable', :status => :forbidden }
+      format.json { render :nothing => true, :status => :forbidden }
     end
   end
 

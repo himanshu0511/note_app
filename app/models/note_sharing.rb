@@ -1,7 +1,7 @@
 class NoteSharing < ActiveRecord::Base
   attr_accessible :note, :user
-  belongs_to :notes
-  belongs_to :users
+  belongs_to :note, :foreign_key => 'note_id'
+  belongs_to :user, :foreign_key => 'user_id'
 
   # returns note shared between user created the note and the user to which note is share
   scope :notes_shared, lambda{ |creator, shared_to| where(

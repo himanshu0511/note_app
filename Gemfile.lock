@@ -53,6 +53,11 @@ GEM
     diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.5.2)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.5.0)
+      factory_girl (~> 4.5.0)
+      railties (>= 3.0.0)
     hike (1.2.3)
     hirb (0.7.3)
     i18n (0.7.0)
@@ -168,6 +173,9 @@ GEM
     warden (1.2.3)
       rack (>= 1.0)
     will_paginate (3.0.7)
+    yaml_db (0.3.0)
+      rails (>= 3.0, < 4.3)
+      rake (>= 0.8.7)
 
 PLATFORMS
   ruby
@@ -176,6 +184,7 @@ DEPENDENCIES
   autoprefixer-rails
   bootstrap-sass (~> 3.1.1.0)
   devise (= 3.4.1)
+  factory_girl_rails (~> 4.0)
   hirb
   jquery-form-rails
   jquery-rails
@@ -191,3 +200,4 @@ DEPENDENCIES
   thinking-sphinx (~> 3.1.0)
   uglifier (>= 1.0.3)
   will_paginate (~> 3.0.6)
+  yaml_db
