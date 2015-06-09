@@ -94,7 +94,10 @@ class User < ActiveRecord::Base
 
   def update_with_password_without_current_password(params, *options)
     params_valid = true
-
+    if params[:full_name].blank?
+      self.errors.add(:full_name, :blank)
+      params_valid = false
+    end
     if params[:password].blank?
       self.errors.add(:password, :blank)
       params_valid = false
@@ -108,7 +111,7 @@ class User < ActiveRecord::Base
       params.delete(:password_confirmation)
       self.assign_attributes(params, *options)
       self.valid?
-      false
+      return false
     end
     result = update_attributes(params, *options)
     clean_up_passwords
