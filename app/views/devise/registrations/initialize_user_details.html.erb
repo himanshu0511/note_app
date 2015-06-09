@@ -16,10 +16,6 @@
           <%= f.text_field :full_name, autofocus: true %>
         </div>
 
-        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-            <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-        <% end %>
-
         <div class="form-group">
           <%= f.label :password %>
           <%= f.password_field :password, autocomplete: "off" %>
